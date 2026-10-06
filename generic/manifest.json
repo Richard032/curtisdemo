@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 2,
+  "brand": "generic",
+  "styles": {
+    "version": "48f308dce067502e0ad5d4ca67de7fadb634ce3f936f5f25f6ad46372396e6e1",
+    "sha256": "48f308dce067502e0ad5d4ca67de7fadb634ce3f936f5f25f6ad46372396e6e1",
+    "size": 32763,
+    "uiContractVersion": 2,
+    "files": []
+  },
+  "graphics": {
+    "version": "1e7cfbd6156839490f0681551ed69e77e24f25c48ccf67b64ae3a460dd58d373",
+    "sha256": "",
+    "size": 0,
+    "uiContractVersion": 2,
+    "files": [
+      {
+        "name": "baseline_add_a_photo_48pt.png",
+        "sha256": "df2c229cc321c261105bfe9560bd8765d5938d6a0f7442970af015e5d458055f",
+        "size": 866
+      },
+      {
+        "name": "baseline_photo_48pt.png",
+        "sha256": "4c8c42516bd2e78d396d6ea93cbc87218c6fdda1f28d1d478da7cd6bbda405d3",
+        "size": 597
+      },
+      {
+        "name": "close_48dp_000000.png",
+        "sha256": "1fc2ec80144285f24a4763628cae916505df320e45221f1d6f62ef6cde9baf07",
+        "size": 425
+      },
+      {
+        "name": "ic_assignment_48pt.png",
+        "sha256": "19d11dd426b5d830be6cea12874207fdda1aafdc328d3b94ea40fa11e94246d1",
+        "size": 242
+      },
+      {
+        "name": "ic_assignment_ind_48pt.png",
+        "sha256": "19be50fb8863c2f624ebaabfd347d2aebc26198320287605f08cfe3d891af280",
+        "size": 379
+      },
+      {
+        "name": "ic_chat_48pt.png",
+        "sha256": "a5117132a3f879e74aaf8bed2ef52373568c194288575bb2a3ca9438c974430c",
+        "size": 193
+      },
+      {
+        "name": "ic_send_48pt.png",
+        "sha256": "41dbf924278d9df9d71938aa7f1ce57a4f12abb11049439f399da18880f9855b",
+        "size": 923
+      },
+      {
+        "name": "mail_24dp.png",
+        "sha256": "94c6d27d9f79d20786eb897d7319b12ec056e24f66e0db11c68ce76066fe6835",
+        "size": 375
+      },
+      {
+        "name": "mail_disabled_24dp.png",
+        "sha256": "7f78f6991a148731f3b2d4f8b7eab2a0b0eb9c14dda80727833be923a2495a11",
+        "size": 483
+      },
+      {
+        "name": "menu_48dp_000000.png",
+        "sha256": "24ab6a212f133441ce3604f5e2b585f7ed882623a761329ef099c90e783e39b7",
+        "size": 235
+      },
+      {
+        "name": "oem_icon_180x180.png",
+        "sha256": "8927e34204079f94bf4b94109ebfc2b8012a9b5f1723476fcb8e5ffbcaf25c08",
+        "size": 10444
+      },
+      {
+        "name": "power_settings_new_40dp_000000.png",
+        "sha256": "ae0b66f015a718026c26385be244ea65f87f998496f29be0832e3784f0da02e6",
+        "size": 844
+      },
+      {
+        "name": "question_mark.png",
+        "sha256": "b3dd36eb26f0de09aecf2b711be8d3a14d4ad0c6b98588a8320749b68a82b6e9",
+        "size": 4748
+      },
+      {
+        "name": "top_bar_logo.png",
+        "sha256": "0d7e5ebf71fc8499e08494bde4511e2da546ffe7c176bd8b2996e0c7bc22fb79",
+        "size": 21716
+      },
+      {
+        "name": "visibility.png",
+        "sha256": "ee78d71d70acc36434ddcea526d59849f93e4c00409948d1e7dfc4d48c98cd66",
+        "size": 813
+      },
+      {
+        "name": "visibility_off.png",
+        "sha256": "77e9086114a93dc1d104a0806a3f575d6a1799260ca234422142ddc35721e6a6",
+        "size": 863
+      },
+      {
+        "name": "west_48dp_000000.png",
+        "sha256": "7055f1f56581e8cc2f20ca1f0d5cef601a380ce17fd457521eb95ed2907e0dd8",
+        "size": 1752
+      },
+      {
+        "name": "wheelchair.png",
+        "sha256": "bd275828840bb7b95913b2b1774d9c6c0a7166a59824f19fe267558e0433fe5a",
+        "size": 3932
+      }
+    ]
+  }
+}

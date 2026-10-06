@@ -1,0 +1,13 @@
+# ----------------------------------------------------------------------------------------------------------------------
+#  <copyright file=".gitattributes" company="Curtis Instruments AG">
+#  (c) 2026 Curtis Instruments AG, Biberist, Switzerland, www.curtis.ch
+#  </copyright>
+#  <summary>Preserves exact style bytes so manifest SHA-256 values stay valid after checkout.</summary>
+#  <date>06-10-2026</date>
+#  <author>rsu - Richard Sumka</author>
+# ----------------------------------------------------------------------------------------------------------------------
+*.css text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.mjs text eol=lf
+*.png binary

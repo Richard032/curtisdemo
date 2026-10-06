@@ -1,0 +1,11 @@
+# ----------------------------------------------------------------------------------------------------------------------
+#  <copyright file=".gitignore" company="Curtis Instruments AG">
+#  (c) 2026 Curtis Instruments AG, Biberist, Switzerland, www.curtis.ch
+#  </copyright>
+#  <summary>Keeps runtime appearance history and local dependencies out of the deployment repository.</summary>
+#  <date>06-10-2026</date>
+#  <author>rsu - Richard Sumka</author>
+# ----------------------------------------------------------------------------------------------------------------------
+data/
+node_modules/
+*.log
