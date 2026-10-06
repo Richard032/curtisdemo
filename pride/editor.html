@@ -32,6 +32,8 @@
   #preview-page { margin-left: 8px; }
   .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 400px; overflow: auto; }
   .field { display: grid; gap: 5px; } .field span { font-size: 13px; overflow-wrap: anywhere; }
+  .feature-switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; }
+  .feature-switch input { width: 20px; height: 20px; padding: 0; accent-color: #215b98; }
   .color-value { display: flex; align-items: center; gap: 8px; }
   .color-value input { flex: 1; }
   .color-swatch { width: 34px; height: 34px; flex: none; border: 1px solid #bbc6d2; border-radius: 5px; }
@@ -66,6 +68,12 @@
     <p>The real React pages use browser mock data here. Preview does not publish your changes.</p>
     <label>Page <select id="preview-page" disabled></select></label>
     <iframe id="preview-frame" title="React app preview"></iframe>
+  </section>
+  <section>
+    <h2>Features</h2>
+    <label class="feature-switch">Chat <input id="feature-chat" type="checkbox"></label>
+    <label class="feature-switch">Change log <input id="feature-changelog" type="checkbox"></label>
+    <small>These switches affect the React pages. A feature disabled by the app cannot be enabled here.</small>
   </section>
   <section>
     <h2>Colors and layout tokens</h2>
@@ -121,6 +129,19 @@ function validateCss(css) {
     throw Error("CSS scripts, external resources and unsupported rules are forbidden.");
 }
 function serializeCss() { return Array.from(sheet.cssRules, rule => rule.cssText).join("\n") + "\n"; }
+function renderFeatures() {
+  let root = Array.from(sheet.cssRules).find(rule => rule instanceof CSSStyleRule && rule.selectorText === ":root");
+  for (const [id, property] of [["feature-chat", "--react-ChatEnabled"], ["feature-changelog", "--react-ChangeLogEnabled"]]) {
+    const input = $(id);
+    input.checked = root?.style.getPropertyValue(property).trim() !== "false";
+    input.onchange = () => {
+      root ??= sheet.cssRules[sheet.insertRule(":root {}", 0)];
+      root.style.setProperty(property, input.checked ? "true" : "false");
+      $("css-source").value = serializeCss();
+      changedStyles = true; dirty();
+    };
+  }
+}
 // Link old published styles when they repeat the brand color for these shared roles.
 function linkBrandColors() {
   let linked = false;
@@ -158,7 +179,8 @@ function renderColors() {
   function scan(rules) {
     for (const rule of rules) {
       if (rule instanceof CSSStyleRule) for (const property of Array.from(rule.style)) {
-        if (!property.startsWith("--react-") || !property.toLowerCase().includes(search)) continue;
+        if (!property.startsWith("--react-") || property === "--react-ChatEnabled" ||
+            property === "--react-ChangeLogEnabled" || !property.toLowerCase().includes(search)) continue;
         const row = document.createElement("label"); row.className = "field";
         const title = document.createElement("span"); title.textContent = property;
         const input = document.createElement("input");
@@ -240,6 +262,7 @@ async function loadPackage() {
     sheet = new CSSStyleSheet(); sheet.replaceSync(css);
     const linked = linkBrandColors();
     $("css-source").value = linked ? serializeCss() : css;
+    renderFeatures();
     renderColors();
     changedStyles = linked; replacements.clear(); $("publish").disabled = !linked || !canPublish; $("preview-button").disabled = false;
     $("product").textContent = manifest.brand; $("editor").hidden = false;
@@ -252,6 +275,7 @@ $("css-source").addEventListener("input", () => {
     validateCss(input.value);
     const next = new CSSStyleSheet(); next.replaceSync(input.value);
     sheet = next;
+    renderFeatures();
     renderColors();
     input.setCustomValidity("");
     changedStyles = true; dirty();
