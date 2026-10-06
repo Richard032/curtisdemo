@@ -11,7 +11,7 @@
 
 This Node.js app serves versioned React styles, graphics, and a browser editor for Pride, Generic, and Ottobock. Hostinger starts it with `npm start` and supplies `PORT`.
 
-Set `APPEARANCE_UPLOAD_TOKEN` in Hostinger to a separate secret of at least 24 characters before using **Save to server**. Set `APPEARANCE_DATA_DIR` to a persistent writable directory outside the deployed source so edited versions survive redeployments. Keep the token out of this repository.
+Set `APPEARANCE_UPLOAD_TOKEN` in Hostinger to a separate secret of at least 24 characters before using **Save to server**. Edited versions are stored under `HOME/curtis-appearance-data` outside the deployed source; `APPEARANCE_DATA_DIR` can override that location. Keep the token out of this repository.
 
 The editor URLs are `/ReactAppearance/pride/editor.html`, `/ReactAppearance/generic/editor.html`, and `/ReactAppearance/ottobock/editor.html`. Editors load their brand's files automatically. Changed styles and graphics receive independent random version IDs. Old version folders remain available after Save. The upload API is `/ReactAppearance/api/publish`.
 

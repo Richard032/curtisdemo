@@ -16,7 +16,9 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(fileURLToPath(import.meta.url));
-const dataRoot = resolve(process.env.APPEARANCE_DATA_DIR || join(root, "data"));
+// Hostinger replaces the deployment directory on each build. HOME is outside it.
+const dataRoot = resolve(process.env.APPEARANCE_DATA_DIR ||
+  join(process.env.HOME || root, "curtis-appearance-data"));
 const brands = new Set(["generic", "ottobock", "pride"]);
 const versionPattern = /^[a-f0-9]{64}$/i;
 const graphicPattern = /^[A-Za-z0-9][A-Za-z0-9._-]{0,95}\.(?:png|jpe?g|gif|webp)$/i;
