@@ -24,8 +24,8 @@
   section { background: white; border: 1px solid #dce2e8; border-radius: 10px; padding: 20px; margin-bottom: 18px; }
   button { border: 0; border-radius: 6px; padding: 11px 17px; background: #215b98; color: white; cursor: pointer; }
   button:disabled { opacity: .5; cursor: default; }
-  input, select, textarea { padding: 9px; border: 1px solid #bbc6d2; border-radius: 5px; font: inherit; min-width: 0; }
-  #search, #rule { width: 100%; margin-bottom: 14px; }
+  input, textarea { padding: 9px; border: 1px solid #bbc6d2; border-radius: 5px; font: inherit; min-width: 0; }
+  #search { width: 100%; margin-bottom: 14px; }
   #css-source { width: 100%; min-height: 260px; font: 13px/1.5 ui-monospace, monospace; }
   .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
   .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 400px; overflow: auto; }
@@ -47,6 +47,7 @@
     <h1>Curtis appearance editor <small>Styles and graphics</small></h1>
   </div>
   <p>Edit this brand's styles or replace pictures, then save the changes to the update server.</p>
+  <p><a href="/">Choose another brand</a></p>
   <div class="toolbar">
     <label id="upload-controls" hidden>Server authorization <input id="upload-key" type="password" autocomplete="off"></label>
     <button id="publish" disabled>Save to server</button><span id="product"></span>
@@ -61,13 +62,8 @@
   </section>
   <section>
     <h2>Styles</h2>
-    <p>Select an element or state, including mobile layout rules. Edit a value; leave a field blank to use the app default.
-    CSS units such as <code>px</code> and <code>rem</code> are accepted.</p>
-    <select id="rule" aria-label="Style selector"></select>
-    <div class="fields" id="declarations"></div>
-    <p><small>The original React CSS is in reference/. Responsive rules and animation values are editable. Fonts stay bundled in the app.</small></p>
     <label for="css-source">Complete stylesheet</label>
-    <p><small>Edit any selector or property here. The fields above update this CSS automatically.</small></p>
+    <p><small>Edit any selector, property, mobile rule or animation here. The color fields above update this CSS automatically. Fonts stay bundled in the app.</small></p>
     <textarea id="css-source" spellcheck="false"></textarea>
   </section>
   <section>
@@ -85,7 +81,7 @@
 "use strict";
 const $ = id => document.getElementById(id);
 const encoder = new TextEncoder();
-let manifest, sheet, catalog = [], changedStyles = false, replacements = new Map();
+let manifest, sheet, changedStyles = false, replacements = new Map();
 const safeValue = value => value.length <= 1024 && !/[\u0000-\u001f\u007f<>\\{};]/.test(value) &&
   !/(?:url|image-set|expression|behavior|paint)\s*\(|(?:javascript|vbscript|data)\s*:|@|\/\*|\*\//i.test(value);
 function status(message, error = false) { $("status").textContent = message; $("status").className = error ? "error" : ""; }
@@ -111,60 +107,34 @@ function validateCss(css) {
       clean.replace(/@\s*(?:media|keyframes|-webkit-keyframes)\b/g, "").includes("@"))
     throw Error("CSS scripts, external resources and unsupported rules are forbidden.");
 }
-function field(entry, property) {
-  const row = document.createElement("label"); row.className = "field";
-  const name = document.createElement("span"); name.textContent = property;
-  const input = document.createElement("input");
-  input.value = entry.style.getPropertyValue(property).trim();
-  input.placeholder = "App default";
-  input.addEventListener("input", () => {
-    const value = input.value.trim();
-    const valid = safeValue(value) && (!value || CSS.supports(property, value));
-    input.setCustomValidity(valid ? "" : "Invalid or unsafe CSS value for " + property);
-    if (valid) {
-      if (value) entry.style.setProperty(property, value, entry.style.getPropertyPriority(property));
-      else entry.style.removeProperty(property);
-      $("css-source").value = serializeCss();
-      changedStyles = true;
-    }
-    dirty();
-  });
-  row.append(name, input); return row;
-}
 function serializeCss() { return Array.from(sheet.cssRules, rule => rule.cssText).join("\n") + "\n"; }
-function rebuildCatalog() {
-  catalog = [];
-  function collect(rules, context = "") {
-    for (const rule of rules) {
-      if (rule instanceof CSSStyleRule || rule instanceof CSSKeyframeRule)
-        catalog.push({ style: rule.style, label: context + (rule.selectorText || rule.keyText) });
-      else if (rule.cssRules) collect(rule.cssRules, context + (rule.conditionText || "@keyframes " + rule.name) + " — ");
-    }
-  }
-  collect(sheet.cssRules);
-  $("rule").replaceChildren(...catalog.map((entry, index) => {
-    const option = document.createElement("option"); option.value = index; option.textContent = entry.label; return option;
-  }));
-  renderColors(); renderDeclarations();
-}
-function declarations(style) {
-  // Serialized CSS keeps useful shorthand fields, rather than expanding padding into four fields.
-  return style.cssText.split(";").filter(text => text.trim()).map(text => text.slice(0, text.indexOf(":")).trim());
-}
 function renderColors() {
   $("colors").replaceChildren();
   const search = $("search").value.toLowerCase();
-  for (const entry of catalog) for (const property of declarations(entry.style)) {
-    if (!property.startsWith("--react-") || !property.toLowerCase().includes(search)) continue;
-    const row = field(entry, property);
-    row.querySelector("span").textContent += " · " + entry.label;
-    $("colors").append(row);
+  function scan(rules) {
+    for (const rule of rules) {
+      if (rule instanceof CSSStyleRule) for (const property of Array.from(rule.style)) {
+        if (!property.startsWith("--react-") || !property.toLowerCase().includes(search)) continue;
+        const row = document.createElement("label"); row.className = "field";
+        const title = document.createElement("span"); title.textContent = property;
+        const input = document.createElement("input");
+        input.value = rule.style.getPropertyValue(property).trim();
+        input.addEventListener("input", () => {
+          const value = input.value.trim();
+          const valid = safeValue(value) && (!value || CSS.supports(property, value));
+          input.setCustomValidity(valid ? "" : "Invalid CSS value.");
+          if (!valid) return;
+          if (value) rule.style.setProperty(property, value);
+          else rule.style.removeProperty(property);
+          $("css-source").value = serializeCss();
+          changedStyles = true; dirty();
+        });
+        row.append(title, input); $("colors").append(row);
+      }
+      else if (rule.cssRules) scan(rule.cssRules);
+    }
   }
-}
-function renderDeclarations() {
-  $("declarations").replaceChildren();
-  const entry = catalog[Number($("rule").value)];
-  if (entry) for (const property of declarations(entry.style)) $("declarations").append(field(entry, property));
+  scan(sheet.cssRules);
 }
 
 async function rasterType(file) {
@@ -211,7 +181,7 @@ async function loadPackage() {
     validateCss(css);
     sheet = new CSSStyleSheet(); sheet.replaceSync(css);
     $("css-source").value = css;
-    rebuildCatalog();
+    renderColors();
     changedStyles = false; replacements.clear(); $("publish").disabled = true;
     $("product").textContent = manifest.brand; $("editor").hidden = false;
     showVersions(); await renderGraphics(); status("Appearance loaded. Make your changes.");
@@ -222,7 +192,7 @@ $("css-source").addEventListener("input", () => {
     validateCss(input.value);
     const next = new CSSStyleSheet(); next.replaceSync(input.value);
     sheet = next;
-    rebuildCatalog();
+    renderColors();
     input.setCustomValidity("");
     changedStyles = true; dirty();
   } catch (error) {
@@ -232,7 +202,6 @@ $("css-source").addEventListener("input", () => {
   }
 });
 $("search").oninput = renderColors;
-$("rule").onchange = renderDeclarations;
 
 function base64(bytes) {
   const chunks = [];

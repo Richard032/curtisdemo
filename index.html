@@ -1,0 +1,39 @@
+<!doctype html>
+<!--
+  <copyright file="index.html" company="Curtis Instruments AG">
+  (c) 2026 Curtis Instruments AG, Biberist, Switzerland, www.curtis.ch
+  </copyright>
+  <summary>Choose the brand whose React appearance should be edited.</summary>
+  <date>06-10-2026</date>
+  <author>rsu - Richard Sumka</author>
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Curtis appearance editor</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f3f5f7;
+      color: #243143; font: 16px system-ui, sans-serif; }
+    main { width: min(90vw, 540px); padding: 32px; background: white; border: 1px solid #dce2e8; border-radius: 10px; }
+    img { width: 52px; height: 68px; object-fit: contain; vertical-align: middle; margin-right: 14px; }
+    h1 { display: inline; font-size: 25px; } p { line-height: 1.5; }
+    nav { display: grid; gap: 12px; margin-top: 25px; }
+    a { display: block; padding: 13px 18px; border-radius: 6px; background: #215b98; color: white;
+      text-align: center; text-decoration: none; font-weight: 600; }
+    a:hover, a:focus-visible { background: #17416e; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="/ReactAppearance/pride/curtis-logo.png" alt="Curtis Instruments">
+    <h1>Appearance editor</h1>
+    <p>Select the brand whose styles and graphics you want to edit.</p>
+    <nav aria-label="Brand">
+      <a href="/ReactAppearance/pride/editor.html">Pride</a>
+      <a href="/ReactAppearance/generic/editor.html">Generic</a>
+      <a href="/ReactAppearance/ottobock/editor.html">Ottobock</a>
+    </nav>
+  </main>
+</body>
+</html>
