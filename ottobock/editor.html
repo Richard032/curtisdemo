@@ -28,6 +28,7 @@
   #search { width: 100%; margin-bottom: 14px; }
   #css-source { width: 100%; min-height: 260px; font: 13px/1.5 ui-monospace, monospace; }
   .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
+  #preview-frame { display: block; width: min(100%, 420px); height: 650px; margin: 16px auto 0; border: 1px solid #bbc6d2; border-radius: 8px; }
   .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 400px; overflow: auto; }
   .field { display: grid; gap: 5px; } .field span { font-size: 13px; overflow-wrap: anywhere; }
   .graphics { display: grid; grid-template-columns: repeat(auto-fill,minmax(225px,1fr)); gap: 14px; }
@@ -50,11 +51,17 @@
   <p><a href="/">Choose another brand</a></p>
   <div class="toolbar">
     <label id="upload-controls" hidden>Server authorization <input id="upload-key" type="password" autocomplete="off"></label>
+    <button id="preview-button" type="button" disabled>Preview changes</button>
     <button id="publish" disabled>Save to server</button><span id="product"></span>
   </div>
   <p id="status" role="status" aria-live="polite">Loading the exported appearance…</p>
 </header>
 <main id="editor" hidden>
+  <section id="preview-panel" hidden>
+    <h2>Preview</h2>
+    <p>Sample app screen and all graphics. Nothing is published until you save.</p>
+    <iframe id="preview-frame" title="Appearance preview" sandbox=""></iframe>
+  </section>
   <section>
     <h2>Colors and layout tokens</h2>
     <input id="search" type="search" placeholder="Find a color or layout token…" aria-label="Find a color or layout token">
@@ -77,6 +84,38 @@
     <small id="versions"></small>
   </section>
 </main>
+<template id="preview-template">
+  <div id="root">
+    <div class="base-view">
+      <header class="topbar">
+        <div class="topbar-side"><button class="icon-button"><img data-preview-image="menu_48dp_000000.png" alt="Menu"></button></div>
+        <div class="brand"><img class="topbar-logo" data-preview-image="top_bar_logo.png" alt="Brand logo"></div>
+        <div class="topbar-side topbar-actions"><button class="icon-button"><img data-preview-image="power_settings_new_40dp_000000.png" alt="Power"></button></div>
+      </header>
+      <main class="base-view__user-content">
+        <section class="start-layout">
+          <div class="start-step" data-react-style="CommonStepGridStyle">
+            <span class="start-step-circle" data-react-style="CommonStepCircleBoxViewStyle"><span class="start-step-number" data-react-style="CommonStepNumberLabelStyle">1</span></span>
+            <p data-react-style="CommonStepLabelStyle">Bluetooth aktivieren</p>
+            <button class="button tutorial-button" data-react-style="CommonTutorialButtonTextStyle"><img data-preview-image="question_mark.png" alt="">Anleitung</button>
+          </div>
+          <div class="start-step" data-react-style="CommonStepGridStyle">
+            <span class="start-step-circle" data-react-style="CommonStepCircleBoxViewStyle"><span class="start-step-number" data-react-style="CommonStepNumberLabelStyle">2</span></span>
+            <p data-react-style="CommonStepLabelStyle">Programmiergerät aktivieren</p>
+            <button class="button primary" data-react-style="CommonButtonTextStyle">Geräte suchen</button>
+            <img data-preview-image="wheelchair.png" alt="Device" width="48" height="48">
+          </div>
+        </section>
+      </main>
+      <nav class="bottom-nav">
+        <a class="active"><img data-preview-image="ic_assignment_ind_48pt.png" alt="">DETAILS</a>
+        <a><img data-preview-image="ic_chat_48pt.png" alt="">CHAT</a>
+        <a><img data-preview-image="ic_assignment_48pt.png" alt="">LOG</a>
+      </nav>
+    </div>
+  </div>
+  <section class="preview-gallery"><h2>All graphics</h2><div id="preview-graphics"></div></section>
+</template>
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
@@ -175,14 +214,14 @@ function showVersions() {
 async function loadPackage() {
     $("editor").hidden = true; $("publish").disabled = true;
     manifest = JSON.parse(await (await read("manifest.json")).text());
-    if (manifest.schemaVersion !== 2 || manifest.styles.uiContractVersion !== 2 || manifest.graphics.uiContractVersion !== 2)
+    if (!["generic", "ottobock", "pride"].includes(manifest.brand) || manifest.schemaVersion !== 2 || manifest.styles.uiContractVersion !== 2 || manifest.graphics.uiContractVersion !== 2)
       throw Error("This editor requires appearance schema 2 and UI contract 2.");
     const css = await (await read("styles/" + manifest.styles.version + "/react.css")).text();
     validateCss(css);
     sheet = new CSSStyleSheet(); sheet.replaceSync(css);
     $("css-source").value = css;
     renderColors();
-    changedStyles = false; replacements.clear(); $("publish").disabled = true;
+    changedStyles = false; replacements.clear(); $("publish").disabled = true; $("preview-button").disabled = false;
     $("product").textContent = manifest.brand; $("editor").hidden = false;
     showVersions(); await renderGraphics(); status("Appearance loaded. Make your changes.");
 }
@@ -203,6 +242,39 @@ $("css-source").addEventListener("input", () => {
 });
 $("search").oninput = renderColors;
 
+async function previewImage(name) {
+  const replacement = replacements.get(name);
+  if (replacement) {
+    const type = await rasterType(replacement);
+    return "data:" + type + ";base64," + base64(new Uint8Array(await replacement.arrayBuffer()));
+  }
+  return new URL("graphics/" + manifest.graphics.version + "/" + encodeURIComponent(name), location.href).href;
+}
+$("preview-button").onclick = async () => {
+  try {
+    const css = $("css-source").value;
+    validateCss(css);
+    const testSheet = new CSSStyleSheet(); testSheet.replaceSync(css);
+    const content = $("preview-template").content.cloneNode(true);
+    for (const image of content.querySelectorAll("[data-preview-image]")) {
+      image.src = await previewImage(image.dataset.previewImage);
+      image.removeAttribute("data-preview-image");
+    }
+    const gallery = content.querySelector("#preview-graphics");
+    for (const file of manifest.graphics.files) {
+      const figure = document.createElement("figure");
+      const image = document.createElement("img"); image.src = await previewImage(file.name); image.alt = "";
+      const caption = document.createElement("figcaption"); caption.textContent = file.name;
+      figure.append(image, caption); gallery.append(figure);
+    }
+    const page = document.createElement("div"); page.append(content);
+    // A sandboxed iframe displays the current CSS and images without running scripts.
+    $("preview-frame").srcdoc = `<!doctype html><html data-react-brand="${manifest.brand}" data-react-idiom="phone" data-react-platform="android"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style><style>.preview-gallery{padding:18px}.preview-gallery figure{margin:12px 0;padding:8px;border:1px solid #ddd}.preview-gallery img{max-width:100%;height:60px;object-fit:contain}.preview-gallery figcaption{overflow-wrap:anywhere;font:12px system-ui}</style></head><body>${page.innerHTML}</body></html>`;
+    $("preview-panel").hidden = false;
+    $("preview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+    status("Preview updated. Save to server when ready.");
+  } catch (error) { status(error.message, true); }
+};
 function base64(bytes) {
   const chunks = [];
   for (let i = 0; i < bytes.length; i += 32768)
