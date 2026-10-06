@@ -184,7 +184,8 @@ async function serve(request, response, pathname) {
       if (!details.isFile()) continue;
       const extension = path.slice(path.lastIndexOf("."));
       response.writeHead(200, { "Content-Type": mime[extension], "Content-Length": details.size,
-        "Cache-Control": suffix === "manifest.json" ? "no-store" : "public, max-age=3600",
+        // The app verifies exact SHA-256 bytes; the host CDN must not optimize images.
+        "Cache-Control": "private, no-store, no-transform",
         "X-Content-Type-Options": "nosniff" });
       createReadStream(path).pipe(response);
       return;
