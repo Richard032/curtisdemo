@@ -2,9 +2,9 @@
   "schemaVersion": 2,
   "brand": "ottobock",
   "styles": {
-    "version": "285699f64cd93bba1cb97684436fc0839f33fb573c795e3541c2b00d3c3ad7ff",
-    "sha256": "285699f64cd93bba1cb97684436fc0839f33fb573c795e3541c2b00d3c3ad7ff",
-    "size": 33235,
+    "version": "d61a28b2eed244769b5ecebe9d503700da2ec1604ca56ec5202c0329d7d99881",
+    "sha256": "d61a28b2eed244769b5ecebe9d503700da2ec1604ca56ec5202c0329d7d99881",
+    "size": 33138,
     "uiContractVersion": 2,
     "files": []
   },

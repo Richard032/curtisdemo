@@ -1,0 +1,434 @@
+/* React-owned generic colors. Keep in sync with that brand’s visual design. */
+:root {
+  --react-LightBackgroundColor: #FAFAFA;
+  --react-WhiteBackgroundColor: #FFFFFF;
+  --react-DarkBlackBackgroundColor: #222222;
+  --react-MediumGrayTextColor: #4d4d4d;
+  --react-LightTextColor: #FDFDDD;
+  --react-DarkTextColor: #222222;
+  --react-BrandPrimaryColor: #00B194;
+  --react-BoxBackgroundColor: var(--react-BrandPrimaryColor);
+  --react-BrandSecondaryColor: #0079C1;
+  --react-BrandLabelTextColor: #28547A;
+  --react-Transparent: Transparent;
+  --react-Gray: Gray;
+  --react-BrandButtonBackgroundLightGray: #b8b7bd;
+  --react-PopupButtonTextColor: #222222;
+  --react-PopupContentTextColor: #4d4d4d;
+  --react-PopupHeaderTextColor: #4d4d4d;
+  --react-ConnectedTabViewColor: #00B194;
+  --react-EntryFocusBackgroundColor: #C7EDE7;
+  --react-EntryFocusTextColor: #292F32;
+  --react-EntryFocusBorderColor: #00B194;
+  --react-EntryDefaultBorderColor: #E2E6EB;
+  --react-EntryDefaultLabelColor: #969CA0;
+  --react-EntryDefaultEntryColor: #767B81;
+  --react-SettingButtonBackgroundColor: #F3F6F9;
+  --react-SeparatorColor: #D6D9DE;
+  --react-ChatTextColor: #222222;
+  --react-ChatOutgoingBackgroundColor: #C7EDE7;
+  --react-ChatIngoingBackgroundColor: #DAEBF5;
+  --react-PrimaryButtonColorEnabled: var(--react-BrandPrimaryColor);
+  --react-PrimaryButtonColorDisabled: #A0A0A0;
+  --react-PrimaryButtonTextColorEnabled: #FFFFFF;
+  --react-PrimaryButtonTextColorDisabled: #FFFFFF;
+  --react-PrimaryButtonBorderColorEnabled: var(--react-BrandPrimaryColor);
+  --react-PrimaryButtonBorderColorDisabled: #A0A0A0;
+  --react-SecondaryButtonColorEnabled: #FFFFFF;
+  --react-SecondaryButtonColorDisabled: #FFFFFF;
+  --react-SecondaryButtonTextColorEnabled: var(--react-BrandPrimaryColor);
+  --react-SecondaryButtonTextColorDisabled: #A0A0A0;
+  --react-SecondaryButtonBorderColorEnabled: #FFFFFF;
+  --react-SecondaryButtonBorderColorDisabled: #FFFFFF;
+}
+
+/* React-owned ottobock colors. Keep in sync with that brand’s visual design. */
+:root[data-react-brand="ottobock"] {
+  --react-BrandPrimaryColor: #00157A;
+  --react-BrandLabelTextColor: #00157A;
+  --react-WhiteTextColor: White;
+  --react-ConnectedTabViewColor: #DAEBF5;
+  --react-EntryFocusBackgroundColor: #EDF1FF;
+  --react-EntryFocusBorderColor: #3B54D6;
+  --react-ChatTextColor: #FDFDDD;
+  --react-ChatOutgoingBackgroundColor: #222222;
+  --react-ChatIngoingBackgroundColor: #00157A;
+  --react-PrimaryButtonColorDisabled: #E5E7EB;
+  --react-PrimaryButtonTextColorDisabled: #9CA3AF;
+  --react-PrimaryButtonBorderColorDisabled: #E5E7EB;
+  --react-SecondaryButtonTextColorDisabled: #9CA3AF;
+}
+
+/* React uses CSS lengths and browser states instead of MAUI Setter values.
+   These values describe the React layout directly; the brand files own colors. */
+:root {
+  --react-FontSizeMiddle: 15px;
+  --react-FontSizeBig: 20.5px;
+  --react-ButtonHeight: 55px;
+  --react-ButtonWidth: 200px;
+  --react-StepCircleSize: 35px;
+  --react-StepSpacing: 12px;
+  --react-StepPadding: 15px 0;
+  --react-SpacingVerticalStack: 22px;
+  --react-ChatBarMargin: 10px;
+  --react-ChatBarBorderPadding: 2px;
+  --react-ChatBarTextPadding: 10px;
+  --react-PageTitlePadding: 20px 0 10px;
+  --react-PlaceholderColor: #969CA0;
+  --react-DisclaimerButtonWidth: auto;
+  --react-DisclaimerButtonHeight: auto;
+}
+
+/* MAUI OnIdiom and OnPlatform values become explicit React selectors. */
+:root[data-react-platform="ios"] {
+  --react-FontSizeMiddle: 17px;
+  --react-FontSizeBig: 22px;
+}
+
+:root[data-react-idiom="tablet"] {
+  --react-ButtonWidth: 300px;
+  --react-StepCircleSize: 50px;
+  --react-StepSpacing: 25px;
+  --react-StepPadding: 20px 0;
+  --react-SpacingVerticalStack: 30px;
+  --react-ChatBarTextPadding: 5px;
+  --react-PageTitlePadding: 25px 0 10px;
+  --react-DisclaimerButtonWidth: 300px;
+  --react-DisclaimerButtonHeight: 55px;
+}
+
+:root[data-react-idiom="tablet"][data-react-platform="android"] {
+  --react-FontSizeMiddle: 19px;
+  --react-FontSizeBig: 24px;
+}
+
+:root[data-react-idiom="tablet"][data-react-platform="ios"] {
+  --react-FontSizeMiddle: 21px;
+  --react-FontSizeBig: 29px;
+}
+
+:root[data-react-idiom="desktop"] {
+  --react-ButtonHeight: 80px;
+  --react-ButtonWidth: 250px;
+  --react-StepCircleSize: 50px;
+  --react-StepSpacing: 25px;
+  --react-StepPadding: 20px 0;
+  --react-SpacingVerticalStack: 30px;
+  --react-ChatBarTextPadding: 5px;
+  --react-PageTitlePadding: 25px 0 10px;
+  --react-DisclaimerButtonWidth: 250px;
+  --react-DisclaimerButtonHeight: 80px;
+}
+
+:root[data-react-idiom="desktop"][data-react-platform="winui"] {
+  --react-FontSizeMiddle: 17px;
+  --react-FontSizeBig: 25px;
+}
+
+:root {
+  font-family: "WorkSans", system-ui, sans-serif;
+  color: var(--react-DarkTextColor);
+  background: var(--react-LightBackgroundColor);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --brand: var(--react-BrandPrimaryColor);
+  --brand-dark: var(--react-BrandSecondaryColor);
+  --ink: var(--react-DarkTextColor);
+  --muted: var(--react-MediumGrayTextColor);
+  --surface: var(--react-WhiteBackgroundColor);
+  --line: var(--react-SeparatorColor);
+  --success: var(--react-BrandPrimaryColor);
+  --danger: var(--react-PrimaryButtonColorDisabled);
+  --shadow: none;
+}
+
+
+
+
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-height: 100%; }
+body { min-width: 320px; min-height: 100vh; }
+button, input, textarea { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; }
+h1, h2, p { margin-top: 0; }
+h1 { margin-bottom: .5rem; font-size: clamp(1.55rem, 3vw, 2.15rem); line-height: 1.15; }
+h2 { margin-bottom: 1rem; font-size: 1.1rem; }
+p { color: var(--muted); line-height: 1.55; }
+
+/* BaseView owns the viewport; only UserContent scrolls between its header and footer. */
+.base-view { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; background: var(--surface); }
+.topbar { position: relative; z-index: 20; flex: none; display: grid; grid-template-columns: 90px 1fr 90px; align-items: center; min-height: calc(55px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 5px 0; color: var(--react-DarkTextColor); background: var(--react-WhiteBackgroundColor); }
+.topbar-side { display: flex; align-items: center; }
+.topbar-actions { justify-content: flex-end; }
+.brand { display: flex; align-items: center; justify-content: center; gap: 10px; overflow: hidden; font-size: 1.05rem; font-weight: 700; white-space: nowrap; }
+.topbar-logo { display: block; max-width: 100%; max-height: 48px; object-fit: contain; }
+.brand-mark, .hero-logo { display: grid; place-items: center; color: var(--react-PrimaryButtonTextColorEnabled); background: var(--brand); border: 2px solid var(--react-PrimaryButtonBorderColorEnabled); font-weight: 900; }
+.brand-mark { width: 30px; height: 30px; border-radius: 9px; }
+.hero-logo { width: 78px; height: 78px; margin: 0 auto 18px; border-radius: 22px; box-shadow: var(--shadow); font-size: 2.5rem; }
+.icon-button { display: grid; place-items: center; min-width: 42px; min-height: 42px; border: 0; border-radius: 13px; color: inherit; background: transparent; cursor: pointer; font-size: 1.35rem; }
+.icon-button img { display: block; width: 25px; height: 25px; object-fit: contain; }
+.icon-button:hover, .icon-button:active { background: transparent; }
+.base-view__user-content { flex: 1; min-width: 0; min-height: 0; padding: 5px 0; overflow-y: auto; overscroll-behavior: contain; background: var(--react-WhiteBackgroundColor); }
+.page { width: min(100%, 1040px); margin: 0 auto; padding: 22px clamp(14px, 4vw, 34px); }
+.page--start, .page--bluetooth, .page--connection { width: 100%; max-width: none; padding: 5px 0; }
+.page--connected { width: 100%; max-width: none; padding: 0; overflow: hidden; }
+.bottom-nav { position: relative; z-index: 20; flex: none; display: flex; height: calc(60px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); background: var(--surface); }
+.bottom-nav a { display: grid; grid-template-rows: 34px 1fr; flex: 1; place-items: center; padding: 5px 0 2px; color: var(--react-DarkTextColor); text-decoration: none; font-size: 15px; font-weight: 400; line-height: 1; }
+.bottom-nav a img { width: 24px; height: 24px; object-fit: contain; }
+.bottom-nav a.active { color: var(--react-DarkTextColor); background: var(--react-ConnectedTabViewColor); }
+
+.card, .hero-card { border: 1px solid var(--line); border-radius: 20px; background: var(--surface); box-shadow: var(--shadow); }
+.card { padding: clamp(18px, 4vw, 30px); }
+.hero-card { width: min(100%, 560px); margin: clamp(22px, 7vh, 72px) auto 0; padding: clamp(24px, 6vw, 48px); text-align: center; }
+.hero-card .hero-logo { background: var(--brand); }
+.content-stack { display: grid; gap: 18px; }
+.start-layout { display: grid; width: min(83.333%, 620px); margin: 0 auto; }
+.start-step { display: grid; justify-items: center; text-align: center; }
+/* Circle and number appearance come from their separate MAUI styles. */
+.start-step-circle, .start-step-number { display: grid; place-items: center; }
+.start-step-circle { flex-shrink: 0; }
+.start-step p { width: 100%; margin: 0; color: var(--react-DarkTextColor); line-height: 1.25; text-align: left; }
+.provider-login { display: grid; }
+.provider-login h2 { margin: 0; color: var(--react-PrimaryButtonTextColorEnabled); text-align: center; font-size: 15px; }
+.login-form-field { display: grid; gap: 5px; }
+.login-entry-field { position: relative; display: block; min-width: 0; }
+.login-entry-field input { min-height: 38px; padding: 0 34px 0 4px; border: 0; border-radius: 0; }
+.login-entry-border { position: absolute; right: 0; bottom: 0; left: 0; display: block; }
+.login-entry-action { position: absolute; top: 50%; right: 0; display: grid; width: 32px; height: 32px; padding: 4px; border: 0; background: transparent; transform: translateY(-50%); }
+.login-entry-action img { width: 24px; height: 24px; object-fit: contain; }
+.tutorial-button { display: flex; align-items: center; justify-content: center; gap: 10px; width: min(300px, 100%); height: 40px; min-height: 40px; padding: 0 8px; border: 0; background: transparent; }
+.tutorial-button img { width: 24px; height: 24px; object-fit: contain; }
+.start-step > .button[data-react-style="CommonButtonTextStyle"] { padding: 0 10px; border-radius: 32px; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.section-heading p { margin-bottom: 0; }
+.button-row { display: flex; justify-content: flex-end; gap: 12px; }
+.button { min-height: 44px; padding: 10px 18px; border: 1px solid transparent; border-radius: 13px; cursor: pointer; font-weight: 700; transition: transform .12s ease; }
+.button:active { transform: scale(.98); }
+.button:disabled { cursor: default; }
+:where(.button.primary) { color: var(--react-PrimaryButtonTextColorEnabled); border-color: var(--react-PrimaryButtonBorderColorEnabled); background: var(--react-PrimaryButtonColorEnabled); }
+:where(.button.primary:disabled) { color: var(--react-PrimaryButtonTextColorDisabled); border-color: var(--react-PrimaryButtonBorderColorDisabled); background: var(--react-PrimaryButtonColorDisabled); opacity: 1; }
+:where(.button.secondary) { color: var(--react-SecondaryButtonTextColorEnabled); border-color: var(--react-SecondaryButtonBorderColorEnabled); background: var(--react-SecondaryButtonColorEnabled); }
+:where(.button.secondary:disabled) { color: var(--react-SecondaryButtonTextColorDisabled); border-color: var(--react-SecondaryButtonBorderColorDisabled); background: var(--react-SecondaryButtonColorDisabled); opacity: 1; }
+/* State colors must win over the named MAUI style injected after this file. */
+.button.primary[data-react-style]:disabled { color: var(--react-PrimaryButtonTextColorDisabled); border-color: var(--react-PrimaryButtonBorderColorDisabled); background: var(--react-PrimaryButtonColorDisabled); }
+.button.secondary[data-react-style]:disabled { color: var(--react-SecondaryButtonTextColorDisabled); border-color: var(--react-SecondaryButtonBorderColorDisabled); background: var(--react-SecondaryButtonColorDisabled); }
+.button.danger { color: white; background: var(--danger); }
+.button.compact { min-height: 38px; padding: 7px 13px; border-radius: 11px; font-size: .9rem; }
+.button.wide { width: 100%; }
+.link-button { width: fit-content; padding: 4px 0; border: 0; color: var(--brand); background: transparent; cursor: pointer; font-weight: 700; }
+
+.form-grid { display: grid; gap: 15px; margin: 24px 0; text-align: left; }
+.form-grid.two-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+label { display: grid; gap: 7px; color: var(--muted); font-size: .86rem; font-weight: 650; }
+input, textarea { width: 100%; border: 1px solid var(--react-EntryDefaultBorderColor); border-radius: 12px; color: var(--react-EntryDefaultEntryColor); outline: none; background: var(--surface); }
+input { min-height: 46px; padding: 10px 13px; }
+textarea { resize: none; padding: 10px 12px; }
+input:focus, textarea:focus { border-color: var(--react-EntryFocusBorderColor); background: var(--react-EntryFocusBackgroundColor); color: var(--react-EntryFocusTextColor); }
+.input-frame { display: grid; gap: 5px; border: 1px solid var(--react-EntryDefaultBorderColor); }
+.input-frame input { border: 0; }
+/* This is the React equivalent of the Frame DataTrigger in SettingsSettingsView.xaml. */
+.input-frame[data-react-style="InputFrameStyle"]:focus-within { border-color: var(--react-EntryFocusBorderColor); background: var(--react-EntryFocusBackgroundColor); }
+
+.icon-button:focus-visible, .button:focus-visible {
+  outline: 2px solid var(--react-EntryFocusBorderColor);
+  outline-offset: 2px;
+}
+
+.notice { padding: 13px 15px; border-radius: 13px; line-height: 1.45; }
+.notice.error { color: #7e1717; border: 1px solid #efbbbb; background: #fff1f1; }
+.notice.warning { color: #6f4c0a; border: 1px solid #efd590; background: #fff8e3; }
+.loading { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 44vh; color: var(--muted); }
+.spinner { width: 24px; height: 24px; border: 3px solid var(--line); border-top-color: var(--brand); border-radius: 50%; animation: spin .75s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-state { padding: 42px 20px; color: var(--muted); text-align: center; border: 1px dashed var(--line); border-radius: 16px; }
+
+.disclaimer-card { width: min(100%, 760px); margin: 15px auto; }
+.rich-text { max-height: 52vh; margin-bottom: 18px; padding: 18px; overflow: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--react-LightBackgroundColor); line-height: 1.6; }
+.acknowledgement { color: var(--ink); font-weight: 650; }
+.bluetooth-page { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 12px; width: min(350px, 100%); min-height: calc(100dvh - 65px - env(safe-area-inset-top)); margin: 0 auto; }
+.bluetooth-page h1 { margin-bottom: 0; }
+.bluetooth-discovery-row { display: flex; align-items: center; gap: 15px; margin: 15px 0; }
+.bluetooth-discovery-row p { margin: 0; color: var(--react-DarkTextColor); font-size: 15px; font-weight: 700; line-height: 1.2; }
+.bluetooth-busy-indicator { position: relative; flex: 0 0 30px; width: 30px; height: 30px; padding: 0; border: 0; background: transparent; }
+.bluetooth-busy-indicator::before, .bluetooth-busy-indicator::after { position: absolute; content: ""; border: 2px solid var(--react-DarkTextColor); border-radius: 50%; }
+.bluetooth-busy-indicator::before { inset: 3px; border-right-color: transparent; }
+.bluetooth-busy-indicator::after { inset: 8px; border-left-color: transparent; }
+.bluetooth-busy-indicator.is-running { animation: spin .9s linear infinite; }
+.bluetooth-picker { justify-self: center; border-radius: 32px; }
+.device-list { min-height: 0; overflow-y: auto; }
+.device-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 20px; height: 55px; border-bottom: 1px solid var(--react-DarkBlackBackgroundColor); background: transparent; }
+.device-row > span { color: var(--react-DarkTextColor); font-size: 15px; font-weight: 400; }
+.device-icon { width: 40px; height: 45px; margin: 5px 10px; object-fit: contain; }
+.device-connect-button { height: 55px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.device-connect-button:disabled { cursor: default; opacity: .55; }
+.bluetooth-empty { padding: 20px 0; color: var(--muted); text-align: center; }
+.bluetooth-tutorial { align-self: end; justify-self: center; margin: 15px 0; }
+.device-row small, .status-banner small, .session-list small { display: block; margin-top: 4px; color: var(--muted); }
+.progress-steps { display: grid; grid-template-columns: 34px 1fr 34px 1fr 34px; align-items: center; margin: 4px auto 12px; width: min(100%, 360px); }
+.progress-steps span { display: grid; place-items: center; width: 34px; height: 34px; border: 2px solid var(--line); border-radius: 50%; color: var(--muted); background: white; font-weight: 800; }
+.progress-steps span.done, .progress-steps span.active { color: white; border-color: var(--brand); background: var(--brand); }
+.progress-steps i { height: 2px; background: var(--line); }
+.status-banner, .connected-summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; border-radius: 17px; background: var(--react-EntryFocusBackgroundColor); }
+.status-banner > div, .connected-summary > div { display: flex; align-items: center; gap: 10px; }
+.status-banner small { margin-left: 26px; }
+.status-dot { display: inline-block; width: 11px; height: 11px; margin-right: 7px; border-radius: 50%; background: var(--success); }
+.detail-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.detail-grid > div, .detail-list > div { padding: 13px 14px; border-radius: 12px; background: var(--react-SettingButtonBackgroundColor); }
+.detail-grid dt, .detail-list dt { color: var(--muted); font-size: .78rem; font-weight: 650; }
+.detail-grid dd, .detail-list dd { margin: 5px 0 0; font-weight: 750; overflow-wrap: anywhere; }
+.detail-list { display: grid; gap: 8px; }
+.detail-list > div { display: grid; grid-template-columns: minmax(130px, 35%) 1fr; }
+
+.connection-view { display: grid; width: 100%; }
+.connection-view h1 { margin: 0; font-size: 20.5px; font-weight: 700; line-height: 1.18; }
+.connection-view > p { margin: 0; color: var(--react-DarkTextColor); font-size: 15px; font-weight: 400; line-height: 1.35; }
+.connection-values, .provider-values { display: grid; gap: 22px 12px; margin: 0; }
+.connection-values > div, .provider-values > div { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: baseline; }
+.connection-values dt, .provider-values dt { font-family: "WorkSans", sans-serif; font-size: 20.5px; font-weight: 700; }
+.connection-values dd, .provider-values dd { margin: 0; font-size: 20.5px; font-weight: 400; overflow-wrap: anywhere; }
+.connection-separator { height: 1px; margin: 20px 0; background: var(--react-SeparatorColor); }
+.connection-view > h2 { margin: 0; color: var(--react-DarkTextColor); font-size: 20.5px; font-weight: 700; }
+.provider-actions { display: grid; justify-items: center; gap: 12px; }
+.provider-actions > .button:not(.tutorial-button) { border-radius: 32px; }
+.button-with-icon { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.button-with-icon img { width: 24px; height: 24px; object-fit: contain; }
+
+.connected-page, .connected-tab-page { width: 100%; height: 100%; min-height: 0; }
+.connected-tab-page { display: grid; grid-template-rows: auto auto minmax(0, 1fr); overflow: hidden; }
+.connected-title { margin: 0; padding: 20px 20px 10px; }
+.connected-timeout { display: flex; align-items: baseline; min-width: 0; }
+.connected-timeout > span, .connected-timeout > strong { width: auto; }
+.connected-timeout > span { padding: 0 4px 20px 20px; text-align: left; white-space: nowrap; }
+.connected-timeout > strong { padding: 0 0 20px; }
+.connected-session-date { padding: 0 20px 20px; }
+
+.connected-details-list { display: grid; align-content: start; gap: 0; margin: 0; overflow-y: auto; }
+.connected-detail-row { display: grid; gap: 3px; padding: 0 20px 20px; background: transparent; }
+.connected-detail-row dt, .connected-detail-row dd { margin: 0; }
+
+.connected-chat-page { grid-template-rows: auto auto minmax(0, 1fr) auto auto; }
+.connected-messages { display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
+/* ChatCellItem.xaml spans two of three columns and uses the brand's chat colors. */
+.message { width: calc(66.6667% - 20px); margin: var(--react-ChatBarMargin, 10px); padding: var(--react-ChatBarBorderPadding, 2px); border: 1px solid var(--react-DarkBlackBackgroundColor); border-radius: 5px; background: var(--react-ChatIngoingBackgroundColor); }
+.message.outgoing { align-self: flex-end; background: var(--react-ChatOutgoingBackgroundColor); }
+.message img { display: block; width: 100%; height: 320px; border: 1px solid var(--react-DarkBlackBackgroundColor); border-radius: 5px; object-fit: contain; }
+.message p { margin: 0; padding: var(--react-ChatBarTextPadding, 10px); color: var(--react-ChatTextColor); line-height: normal; text-align: left; white-space: pre-wrap; overflow-wrap: anywhere; }
+.message.outgoing p { text-align: right; }
+.connected-chat-error { margin: 4px 5px; }
+.connected-composer { display: grid; grid-template-columns: minmax(0, 1fr) repeat(3, 55px); align-items: start; gap: 5px; height: 70px; padding: 0 5px; background: transparent; }
+.connected-editor-frame { height: 40px; overflow: hidden; border: 1px solid var(--react-DarkBlackBackgroundColor); border-radius: 5px; }
+.connected-editor-frame textarea { height: 40px; min-height: 40px; padding: 7px; border: 0; border-radius: 0; color: var(--react-DarkTextColor); background: transparent; }
+.connected-chat-action { display: grid; place-items: center; width: 55px; height: 40px; padding: 0; border: 1px solid var(--react-BrandPrimaryColor); border-radius: 5px; background: var(--react-BrandPrimaryColor); cursor: pointer; }
+.connected-chat-action:disabled { opacity: 1; }
+.connected-chat-action img { width: 28px; height: 28px; object-fit: contain; }
+
+.connected-changes-page { grid-template-rows: auto auto minmax(0, 1fr); }
+.connected-change-list { min-height: 0; overflow-y: auto; }
+.connected-change-list article { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+.connected-change-list time { margin: 0 5px 10px; color: var(--react-DarkTextColor); white-space: nowrap; }
+.connected-change-list p { margin: 0 5px 10px 0; color: var(--react-DarkTextColor); line-height: normal; white-space: pre-line; }
+
+.settings-list, .menu-list { padding: 0; overflow: hidden; }
+.toggle-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px; padding: 18px; border-bottom: 1px solid var(--line); color: var(--ink); }
+.toggle-row:last-child { border-bottom: 0; }
+.toggle-row small { display: block; margin-top: 4px; color: var(--muted); font-weight: 400; }
+.toggle-row input { width: 48px; height: 26px; min-height: 0; accent-color: var(--brand); }
+.menu-list a { display: flex; justify-content: space-between; padding: 17px 18px; text-decoration: none; border-bottom: 1px solid var(--line); font-weight: 650; }
+.menu-list a:last-child { border-bottom: 0; }
+.menu-list span { color: var(--muted); font-size: 1.25rem; }
+.session-list { display: grid; gap: 10px; }
+.session-list .session-row { display: grid; grid-template-columns: minmax(150px, .8fr) 1.2fr auto; align-items: center; gap: 16px; padding: 17px 20px; width: 100%; color: var(--ink); text-align: left; }
+.session-list dl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; }
+.session-list dl div { min-width: 0; }
+.session-list dt { color: var(--muted); font-size: .75rem; }
+.session-list dd { margin: 3px 0 0; overflow: hidden; text-overflow: ellipsis; font-weight: 650; }
+.session-details { color: var(--react-DarkTextColor); background: var(--react-BrandButtonBackgroundLightGray); }
+.about-card { width: min(100%, 600px); margin: 25px auto; text-align: center; }
+.about-brand-icon { display: block; width: 170px; height: 170px; margin: 0 auto 16px; object-fit: contain; }
+.about-build-info { display: grid; justify-items: start; gap: 10px; width: fit-content; margin: 0 auto; }
+.about-card .menu-list { margin: 28px -30px -30px; border-top: 1px solid var(--line); text-align: left; }
+.prose { width: min(100%, 720px); margin: 12px auto; }
+.imprint-contact { display: grid; gap: 10px; }
+.imprint-contact > div { display: flex; gap: .35rem; }
+.imprint-contact dd { margin: 0; }
+.brand-link { color: var(--react-BrandPrimaryColor); }
+.remote-timeout { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+
+@media (min-width: 760px) {
+  .connected-page { grid-template-columns: minmax(0,1fr); }
+  .message img { height: 428px; }
+}
+
+@media (max-width: 620px) {
+  .page { padding: 16px 12px; }
+  .page--start, .page--bluetooth, .page--connection { padding: 5px 0; }
+  .page--connected { padding: 0; }
+  .form-grid.two-columns, .detail-grid { grid-template-columns: 1fr; }
+  .section-heading { align-items: flex-start; }
+  .detail-list > div { grid-template-columns: 1fr; }
+  .session-list .session-row { grid-template-columns: 1fr; }
+  .button-row { display: grid; grid-template-columns: 1fr 1fr; }
+  .about-card .menu-list { margin-right: -18px; margin-bottom: -18px; margin-left: -18px; }
+}
+
+/* React equivalents of the named XAML styles used by TSX pages.
+   A CSS rule is written for the actual HTML element; unsupported MAUI
+   properties such as HorizontalOptions are represented by its layout rule. */
+
+[data-react-style="CommonBlackTextLabelStyle"] { color: var(--react-DarkTextColor); }
+[data-react-style="CommonCenterSizeBigLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeBig); text-align: center; }
+[data-react-style="CommonCenterSizeMiddleLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); text-align: center; }
+[data-react-style="CommonLeftSizeMiddleLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); text-align: left; }
+[data-react-style="CommonLabelSettingsStyle"] { margin: var(--react-PageTitlePadding); color: var(--react-DarkTextColor); font-size: var(--react-FontSizeBig); font-weight: 700; text-align: left; }
+[data-react-style="CommonLabelSessionDateStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: center; }
+[data-react-style="CommonLabelRemoteTimeoutTitleStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: right; }
+[data-react-style="CommonLabelRemoteTimeoutValueStyle"] { width: 100px; color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: left; }
+[data-react-style="CommonStepLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); text-align: left; }
+[data-react-style="InputLabelStyle"] { color: var(--react-EntryDefaultLabelColor); font-size: var(--react-FontSizeMiddle); font-weight: 400; }
+[data-react-style="ConnectionDetailTitleLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 400; text-align: left; }
+[data-react-style="ConnectionDetailValueLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: left; }
+[data-react-style="TabTitleStyle"], [data-react-style="ConnectionDetailsTitleLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeBig); font-weight: 700; text-align: left; }
+
+/* MAUI BoxView.Color paints the circle. HTML text color belongs to its child. */
+[data-react-style="CommonStepCircleBoxViewStyle"] { width: var(--react-StepCircleSize); height: var(--react-StepCircleSize); border-radius: 50%; background: var(--react-BoxBackgroundColor); }
+[data-react-style="CommonStepNumberLabelStyle"] { width: var(--react-StepCircleSize); height: var(--react-StepCircleSize); color: var(--react-PrimaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: center; }
+[data-react-style="CommonStepGridStyle"] { gap: var(--react-StepSpacing); padding: var(--react-StepPadding); background: transparent; }
+
+[data-react-style="CommonBottomBorderStyle"] { height: 1px; background: var(--react-EntryDefaultBorderColor); }
+[data-react-style="CommonFormLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; }
+[data-react-style="CommonFormEntryStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); background: transparent; }
+[data-react-style="CommonFormEntryStyle"]::placeholder { color: var(--react-EntryDefaultEntryColor); opacity: 1; }
+[data-react-style="TranslatedPlaceholderEntryStyle"] { min-height: 38px; color: var(--react-EntryDefaultEntryColor); font-size: var(--react-FontSizeMiddle); background: transparent; }
+[data-react-style="TranslatedPlaceholderEntryStyle"]::placeholder { color: var(--react-PlaceholderColor); opacity: 1; }
+[data-react-style="InputFrameStyle"] { padding: 5px 10px; border: 1px solid var(--react-EntryDefaultBorderColor); border-radius: 8px; background: transparent; box-shadow: none; }
+
+[data-react-style="CommonButtonTextStyle"], [data-react-style="CommonPrimaryButtonStyleEnabled"] { width: var(--react-ButtonWidth); height: var(--react-ButtonHeight); color: var(--react-PrimaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 400; border: 1px solid var(--react-PrimaryButtonBorderColorEnabled); background: var(--react-PrimaryButtonColorEnabled); white-space: normal; }
+[data-react-style="CommonSecondaryButtonStyleEnabled"] { width: var(--react-ButtonWidth); height: var(--react-ButtonHeight); color: var(--react-SecondaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 400; border: 1px solid var(--react-SecondaryButtonBorderColorEnabled); background: var(--react-SecondaryButtonColorEnabled); white-space: normal; }
+/* MAUI's -1 request means natural size, not a negative CSS dimension. */
+[data-react-style="CommonDisclaimerButtonStyle"] { width: var(--react-DisclaimerButtonWidth); height: var(--react-DisclaimerButtonHeight); color: var(--react-PrimaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 400; background: var(--react-PrimaryButtonColorEnabled); white-space: normal; }
+[data-react-style="CommonTransparentButtonTextStyle"] { width: 120px; height: var(--react-ButtonHeight); color: var(--react-BrandPrimaryColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; border: 0; background: transparent; white-space: normal; }
+[data-react-style="CommonTransparentMenuButtonStyle"] { min-height: 45px; padding: 0; color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; border: 0; background: transparent; white-space: normal; }
+[data-react-style="CommonTutorialButtonTextStyle"] { color: var(--react-BrandPrimaryColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; border: 0; background: transparent; white-space: normal; }
+/* A browser checkbox has no MAUI OnColor or ThumbColor setters. */
+[data-react-style="CommonSwitchStyle"] { accent-color: var(--react-BrandPrimaryColor); }
+
+[data-react-style="CustomVerticalStackStyle"] { padding: 20px; background: transparent; row-gap: var(--react-SpacingVerticalStack); }
+[data-react-style="DefaultVerticalStackLayoutStyle"] { padding: 25px; background: transparent; }
+[data-react-style="ResponsiveGridStyle"] { padding: 25px; background: transparent; row-gap: 12px; }
+[data-react-style="SessionLogGridStyle"] { padding: 0 10px; background: transparent; }
+[data-react-style="ConnectionDetailGridStyle"] { padding: 0 0 20px 20px; }
+
+/* These layouts use wider side margins on tablets in MAUI. */
+:root[data-react-idiom="tablet"] [data-react-style="CustomVerticalStackStyle"] { padding: 0 100px 25px; }
+:root[data-react-idiom="tablet"] [data-react-style="DefaultVerticalStackLayoutStyle"] { padding: 25px 150px; }
+:root[data-react-idiom="tablet"] [data-react-style="ResponsiveGridStyle"] { padding: 0 200px 25px; }
+:root[data-react-idiom="tablet"] [data-react-style="SessionLogGridStyle"] { padding: 0 25px; }
+:root[data-react-idiom="desktop"] [data-react-style="CustomVerticalStackStyle"],
+:root[data-react-idiom="desktop"] [data-react-style="ResponsiveGridStyle"] { padding: 0; }
+:root[data-react-idiom="desktop"] [data-react-style="DefaultVerticalStackLayoutStyle"] { padding: 25px 150px; }
+:root[data-react-idiom="desktop"] [data-react-style="SessionLogGridStyle"] { padding: 0 25px; }
+
+[data-react-style="CommonEditorStyle"] { color: var(--react-DarkTextColor); }
+[data-react-style="CommonLabelStyle"] { font-size: var(--react-FontSizeMiddle); }

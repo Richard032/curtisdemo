@@ -121,9 +121,40 @@ function validateCss(css) {
     throw Error("CSS scripts, external resources and unsupported rules are forbidden.");
 }
 function serializeCss() { return Array.from(sheet.cssRules, rule => rule.cssText).join("\n") + "\n"; }
+// Link old published styles when they repeat the brand color for these shared roles.
+function linkBrandColors() {
+  let linked = false;
+  for (const rule of sheet.cssRules) {
+    if (!(rule instanceof CSSStyleRule)) continue;
+    const primary = rule.style.getPropertyValue("--react-BrandPrimaryColor").trim();
+    if (!primary) continue;
+    for (const name of ["BoxBackgroundColor", "PrimaryButtonColorEnabled",
+      "PrimaryButtonBorderColorEnabled", "SecondaryButtonTextColorEnabled"]) {
+      const property = "--react-" + name;
+      if (rule.style.getPropertyValue(property).trim().toLowerCase() !== primary.toLowerCase()) continue;
+      rule.style.setProperty(property, "var(--react-BrandPrimaryColor)");
+      linked = true;
+    }
+  }
+  return linked;
+}
+function previewColor(value, seen = new Set()) {
+  const alias = /^var\(\s*(--react-[\w-]+)\s*\)$/.exec(value);
+  if (!alias) return CSS.supports("color", value) ? value : null;
+  if (seen.has(alias[1])) return null;
+  seen.add(alias[1]);
+  let next = "";
+  for (const rule of sheet.cssRules) {
+    if (!(rule instanceof CSSStyleRule) ||
+        (rule.selectorText !== ":root" && !rule.selectorText.includes('[data-react-brand="' + manifest.brand + '"]'))) continue;
+    next = rule.style.getPropertyValue(alias[1]).trim() || next;
+  }
+  return next ? previewColor(next, seen) : null;
+}
 function renderColors() {
   $("colors").replaceChildren();
   const search = $("search").value.toLowerCase();
+  const swatches = [];
   function scan(rules) {
     for (const rule of rules) {
       if (rule instanceof CSSStyleRule) for (const property of Array.from(rule.style)) {
@@ -137,10 +168,11 @@ function renderColors() {
         swatch.setAttribute("role", "img");
         swatch.setAttribute("aria-label", "Color preview for " + property);
         function updateSwatch() {
-          const color = CSS.supports("color", input.value.trim());
+          const color = previewColor(input.value.trim());
           swatch.hidden = !color;
-          if (color) swatch.style.backgroundColor = input.value.trim();
+          if (color) swatch.style.backgroundColor = color;
         }
+        swatches.push(updateSwatch);
         updateSwatch();
         input.addEventListener("input", () => {
           const value = input.value.trim();
@@ -150,6 +182,7 @@ function renderColors() {
           if (!valid) return;
           if (value) rule.style.setProperty(property, value);
           else rule.style.removeProperty(property);
+          swatches.forEach(update => update());
           $("css-source").value = serializeCss();
           changedStyles = true; dirty();
         });
@@ -205,11 +238,13 @@ async function loadPackage() {
     const css = await (await read("styles/" + manifest.styles.version + "/react.css")).text();
     validateCss(css);
     sheet = new CSSStyleSheet(); sheet.replaceSync(css);
-    $("css-source").value = css;
+    const linked = linkBrandColors();
+    $("css-source").value = linked ? serializeCss() : css;
     renderColors();
-    changedStyles = false; replacements.clear(); $("publish").disabled = true; $("preview-button").disabled = false;
+    changedStyles = linked; replacements.clear(); $("publish").disabled = !linked || !canPublish; $("preview-button").disabled = false;
     $("product").textContent = manifest.brand; $("editor").hidden = false;
-    showVersions(); await renderGraphics(); status("Appearance loaded. Make your changes.");
+    showVersions(); await renderGraphics();
+    status(linked ? "Matching colors now follow the brand color. Preview and save to publish." : "Appearance loaded. Make your changes.");
 }
 $("css-source").addEventListener("input", () => {
   const input = $("css-source");
