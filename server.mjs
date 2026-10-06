@@ -169,6 +169,28 @@ function serve(response, brand, name) {
   response.end(bytes);
 }
 
+// Serve the same Vite output that MAUI packages, with its public fonts and brand images.
+function serveReact(response, path) {
+  if (path === "/preview/_framework/hybridwebview.js") {
+    response.writeHead(200, { "Content-Type": "text/javascript", "Cache-Control": "no-store" });
+    response.end(); // Browser preview uses the existing mock bridge.
+    return;
+  }
+  const relative = path.startsWith("/preview/") ? path.slice(9) : path.slice(1);
+  if (!/^[A-Za-z0-9_./-]+$/.test(relative) || relative.split("/").some(part => !part || part === "." || part === ".."))
+    reject(404, "React preview file not found.");
+  const extension = relative.slice(relative.lastIndexOf(".")).toLowerCase();
+  const mime = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css",
+    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif",
+    ".webp": "image/webp", ".svg": "image/svg+xml", ".ico": "image/x-icon",
+    ".ttf": "font/ttf", ".woff": "font/woff", ".woff2": "font/woff2" };
+  if (!mime[extension]) reject(404, "React preview file not found.");
+  const bytes = readFileSync(join(root, "preview", relative));
+  response.writeHead(200, { "Content-Type": mime[extension], "Content-Length": bytes.length,
+    "Cache-Control": "private, no-store, no-transform", "X-Content-Type-Options": "nosniff" });
+  response.end(bytes);
+}
+
 export const server = createServer(async (request, response) => {
   try {
     const path = new URL(request.url, "http://localhost").pathname;
@@ -181,6 +203,8 @@ export const server = createServer(async (request, response) => {
       authorized(request);
       publish(await requestJson(request));
       json(response, 200, "Appearance published.");
+    } else if (request.method === "GET" && (path.startsWith("/preview/") || path.startsWith("/brands/") || path.startsWith("/fonts/"))) {
+      serveReact(response, path);
     } else if (request.method === "GET") {
       const match = /^\/ReactAppearance\/(generic|ottobock|pride)\/(.+)$/.exec(path);
       if (!match) reject(404, "Appearance file not found.");

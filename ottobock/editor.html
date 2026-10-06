@@ -29,6 +29,7 @@
   #css-source { width: 100%; min-height: 260px; font: 13px/1.5 ui-monospace, monospace; }
   .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
   #preview-frame { display: block; width: min(100%, 420px); height: 650px; margin: 16px auto 0; border: 1px solid #bbc6d2; border-radius: 8px; }
+  #preview-page { margin-left: 8px; }
   .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 400px; overflow: auto; }
   .field { display: grid; gap: 5px; } .field span { font-size: 13px; overflow-wrap: anywhere; }
   .graphics { display: grid; grid-template-columns: repeat(auto-fill,minmax(225px,1fr)); gap: 14px; }
@@ -59,8 +60,9 @@
 <main id="editor" hidden>
   <section id="preview-panel" hidden>
     <h2>Preview</h2>
-    <p>Sample app screen and all graphics. Nothing is published until you save.</p>
-    <iframe id="preview-frame" title="Appearance preview" sandbox=""></iframe>
+    <p>The real React pages use browser mock data here. Preview does not publish your changes.</p>
+    <label>Page <select id="preview-page" disabled></select></label>
+    <iframe id="preview-frame" title="React app preview"></iframe>
   </section>
   <section>
     <h2>Colors and layout tokens</h2>
@@ -84,43 +86,12 @@
     <small id="versions"></small>
   </section>
 </main>
-<template id="preview-template">
-  <div id="root">
-    <div class="base-view">
-      <header class="topbar">
-        <div class="topbar-side"><button class="icon-button"><img data-preview-image="menu_48dp_000000.png" alt="Menu"></button></div>
-        <div class="brand"><img class="topbar-logo" data-preview-image="top_bar_logo.png" alt="Brand logo"></div>
-        <div class="topbar-side topbar-actions"><button class="icon-button"><img data-preview-image="power_settings_new_40dp_000000.png" alt="Power"></button></div>
-      </header>
-      <main class="base-view__user-content">
-        <section class="start-layout">
-          <div class="start-step" data-react-style="CommonStepGridStyle">
-            <span class="start-step-circle" data-react-style="CommonStepCircleBoxViewStyle"><span class="start-step-number" data-react-style="CommonStepNumberLabelStyle">1</span></span>
-            <p data-react-style="CommonStepLabelStyle">Bluetooth aktivieren</p>
-            <button class="button tutorial-button" data-react-style="CommonTutorialButtonTextStyle"><img data-preview-image="question_mark.png" alt="">Anleitung</button>
-          </div>
-          <div class="start-step" data-react-style="CommonStepGridStyle">
-            <span class="start-step-circle" data-react-style="CommonStepCircleBoxViewStyle"><span class="start-step-number" data-react-style="CommonStepNumberLabelStyle">2</span></span>
-            <p data-react-style="CommonStepLabelStyle">Programmiergerät aktivieren</p>
-            <button class="button primary" data-react-style="CommonButtonTextStyle">Geräte suchen</button>
-            <img data-preview-image="wheelchair.png" alt="Device" width="48" height="48">
-          </div>
-        </section>
-      </main>
-      <nav class="bottom-nav">
-        <a class="active"><img data-preview-image="ic_assignment_ind_48pt.png" alt="">DETAILS</a>
-        <a><img data-preview-image="ic_chat_48pt.png" alt="">CHAT</a>
-        <a><img data-preview-image="ic_assignment_48pt.png" alt="">LOG</a>
-      </nav>
-    </div>
-  </div>
-  <section class="preview-gallery"><h2>All graphics</h2><div id="preview-graphics"></div></section>
-</template>
 <script>
 "use strict";
 const $ = id => document.getElementById(id);
 const encoder = new TextEncoder();
 let manifest, sheet, changedStyles = false, replacements = new Map();
+let previewReady = false, previewPayload;
 const safeValue = value => value.length <= 1024 && !/[\u0000-\u001f\u007f<>\\{};]/.test(value) &&
   !/(?:url|image-set|expression|behavior|paint)\s*\(|(?:javascript|vbscript|data)\s*:|@|\/\*|\*\//i.test(value);
 function status(message, error = false) { $("status").textContent = message; $("status").className = error ? "error" : ""; }
@@ -242,37 +213,44 @@ $("css-source").addEventListener("input", () => {
 });
 $("search").oninput = renderColors;
 
-async function previewImage(name) {
-  const replacement = replacements.get(name);
-  if (replacement) {
-    const type = await rasterType(replacement);
-    return "data:" + type + ";base64," + base64(new Uint8Array(await replacement.arrayBuffer()));
+// The iframe runs the compiled React app. Its routes are supplied by that app.
+window.addEventListener("message", event => {
+  if (event.source !== $("preview-frame").contentWindow || event.origin !== location.origin) return;
+  if (event.data?.type === "curtis-appearance-preview-ready") {
+    const routes = Array.isArray(event.data.routes) ? event.data.routes : [];
+    $("preview-page").replaceChildren(...routes.filter(route => /^\/[A-Za-z0-9/_-]+$/.test(route.path) && typeof route.title === "string")
+      .map(route => { const option = document.createElement("option"); option.value = route.path; option.textContent = route.title; return option; }));
+    $("preview-page").value = "/start"; $("preview-page").disabled = false;
+    previewReady = true;
+    if (previewPayload) $("preview-frame").contentWindow.postMessage(previewPayload, location.origin);
+    status("React preview ready. Save to server when ready.");
+  } else if (event.data?.type === "curtis-appearance-preview-route") {
+    $("preview-page").value = event.data.path;
   }
-  return new URL("graphics/" + manifest.graphics.version + "/" + encodeURIComponent(name), location.href).href;
-}
+});
+$("preview-page").onchange = () => {
+  if (previewReady) $("preview-frame").contentWindow.location.hash = "#" + $("preview-page").value;
+};
 $("preview-button").onclick = async () => {
   try {
     const css = $("css-source").value;
     validateCss(css);
     const testSheet = new CSSStyleSheet(); testSheet.replaceSync(css);
-    const content = $("preview-template").content.cloneNode(true);
-    for (const image of content.querySelectorAll("[data-preview-image]")) {
-      image.src = await previewImage(image.dataset.previewImage);
-      image.removeAttribute("data-preview-image");
+    const graphics = {};
+    for (const asset of manifest.graphics.files) {
+      const file = replacements.get(asset.name) || await read("graphics/" + manifest.graphics.version + "/" + asset.name);
+      graphics[asset.name] = "data:" + await rasterType(file) + ";base64," + base64(new Uint8Array(await file.arrayBuffer()));
     }
-    const gallery = content.querySelector("#preview-graphics");
-    for (const file of manifest.graphics.files) {
-      const figure = document.createElement("figure");
-      const image = document.createElement("img"); image.src = await previewImage(file.name); image.alt = "";
-      const caption = document.createElement("figcaption"); caption.textContent = file.name;
-      figure.append(image, caption); gallery.append(figure);
-    }
-    const page = document.createElement("div"); page.append(content);
-    // A sandboxed iframe displays the current CSS and images without running scripts.
-    $("preview-frame").srcdoc = `<!doctype html><html data-react-brand="${manifest.brand}" data-react-idiom="phone" data-react-platform="android"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style><style>.preview-gallery{padding:18px}.preview-gallery figure{margin:12px 0;padding:8px;border:1px solid #ddd}.preview-gallery img{max-width:100%;height:60px;object-fit:contain}.preview-gallery figcaption{overflow-wrap:anywhere;font:12px system-ui}</style></head><body>${page.innerHTML}</body></html>`;
+    previewPayload = { type: "curtis-appearance-preview-update", css, graphics };
     $("preview-panel").hidden = false;
+    if (previewReady) {
+      $("preview-frame").contentWindow.postMessage(previewPayload, location.origin);
+      status("React preview updated. Save to server when ready.");
+    } else {
+      $("preview-frame").src = "/preview/index.html?appearancePreview=1&brand=" + manifest.brand + "#/start";
+      status("Loading React preview…");
+    }
     $("preview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-    status("Preview updated. Save to server when ready.");
   } catch (error) { status(error.message, true); }
 };
 function base64(bytes) {
