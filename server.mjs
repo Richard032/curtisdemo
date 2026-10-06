@@ -209,7 +209,7 @@ export const server = createServer(async (request, response) => {
   }
 });
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const port = Number(process.env.PORT || 3000);
-  server.listen(port, "0.0.0.0", () => console.log(`[AppearanceServer] Listening on port ${port}; data=${dataRoot}`));
-}
+// Hostinger imports the entry file and expects listen() during module evaluation.
+const port = Number(process.env.PORT || 3000);
+server.listen(port, "0.0.0.0", () =>
+  console.log(`[AppearanceServer] Listening on port ${server.address().port}; data=${dataRoot}`));
