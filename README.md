@@ -17,7 +17,7 @@ The repository folders now match the public URLs: `ReactAppearance/pride/editor.
 node scripts/export-appearance.mjs --brand All --project-root ../InteractiveStyleEditor
 ```
 
-The generated `preview/assets/index-*.js` is unminified so it can be inspected. Edit the original TSX in `InteractiveAssist.React/src/pages/`; the generated JavaScript is replaced on every export.
+Vite writes the compiled JavaScript and CSS to `preview/vite_generated/`. The JavaScript is unminified so it can be inspected. Edit the original TSX in `InteractiveAssist.React/src/pages/`; the generated files are replaced on every export.
 
 For local preview, run `node server.mjs` and open the address printed in the terminal (normally `http://127.0.0.1:3000/`). Leave the command running while editing. Refresh the browser after exporting changed styles, graphics, or React pages. Restart the command only if `server.mjs` changes. Change `LOCAL_PORT` near the top of `server.mjs` if you need another local port. Hostinger's `PORT` environment variable takes priority.
 

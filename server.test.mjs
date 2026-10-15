@@ -48,12 +48,13 @@ test("Node server serves the exported editor and publishes immutable versions", 
     const appResponse = await fetch(`${url}/preview/index.html?appearancePreview=1&brand=pride`);
     assert.equal(appResponse.status, 200);
     const appHtml = await appResponse.text();
-    const script = appHtml.match(/\.\/assets\/[^" ]+\.js/)?.[0];
+    const script = appHtml.match(/\.\/vite_generated\/[^" ]+\.js/)?.[0];
     assert.ok(script, "Vite must export the real React app.");
     assert.equal((await fetch(`${url}/preview/${script.slice(2)}`)).status, 200);
     assert.equal((await fetch(`${url}/brands/pride/top_bar_logo.png`)).status, 200);
     assert.equal((await fetch(`${url}/fonts/WorkSansRegular.ttf`)).status, 200);
-    assert.equal((await fetch(`${url}/preview/assets/hidden.js.map`)).status, 404);    const manifestResponse = await fetch(`${url}/ReactAppearance/pride/manifest.json`);
+    assert.equal((await fetch(`${url}/preview/vite_generated/hidden.js.map`)).status, 404);
+    const manifestResponse = await fetch(`${url}/ReactAppearance/pride/manifest.json`);
     assert.equal(manifestResponse.status, 200);
     assert.match(manifestResponse.headers.get("content-type"), /application\/json/);
     const originalGraphic = initial.graphics.files[0];
