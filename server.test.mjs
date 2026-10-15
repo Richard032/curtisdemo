@@ -25,8 +25,9 @@ test("Node server serves the exported editor and publishes immutable versions", 
   const script = fileURLToPath(new URL("../InteractiveAssist.React/scripts/export-appearance.mjs", import.meta.url));
   const run = spawnSync(process.execPath, [script, "--brand", "Pride", "--output", output], { encoding: "utf8" });
   assert.equal(run.status, 0, run.stderr);
-  const root = join(output, "ReactAppearance");
-  const initial = JSON.parse(await readFile(join(root, "pride", "manifest.json")));
+  const root = output;
+  const brandRoot = join(root, "ReactAppearance", "pride");
+  const initial = JSON.parse(await readFile(join(brandRoot, "manifest.json")));
   process.env.APPEARANCE_DATA_DIR = join(output, "saved-versions");
   process.env.APPEARANCE_UPLOAD_TOKEN = token;
   process.env.PORT = "0";
@@ -56,9 +57,9 @@ test("Node server serves the exported editor and publishes immutable versions", 
     const originalGraphic = initial.graphics.files[0];
     const graphicResponse = await fetch(`${url}/ReactAppearance/pride/graphics/${initial.graphics.version}/${originalGraphic.name}`);
     assert.match(graphicResponse.headers.get("cache-control"), /no-transform/);
-    const css = (await readFile(join(root, "pride", "styles", initial.styles.version, "react.css"), "utf8")) + "\nbody{color:#123456}\n";
+    const css = (await readFile(join(brandRoot, "styles", initial.styles.version, "react.css"), "utf8")) + "\nbody{color:#123456}\n";
     const images = Object.fromEntries(await Promise.all(initial.graphics.files.map(async file =>
-      [file.name, (await readFile(join(root, "pride", "graphics", initial.graphics.version, file.name))).toString("base64")])));
+      [file.name, (await readFile(join(brandRoot, "graphics", initial.graphics.version, file.name))).toString("base64")])));
     const next = structuredClone(initial);
     next.styles.version = "a".repeat(64);
     next.styles.sha256 = hash(css);
@@ -73,7 +74,7 @@ test("Node server serves the exported editor and publishes immutable versions", 
     assert.equal((await publish({ ...payload, css: "body{background:url(evil)}" })).status, 400);
     assert.equal((await publish(payload)).status, 200);
     assert.equal((await publish(payload)).status, 409);
-    assert.equal((await stat(join(root, "pride", "styles", initial.styles.version, "react.css"))).isFile(), true);
+    assert.equal((await stat(join(brandRoot, "styles", initial.styles.version, "react.css"))).isFile(), true);
     assert.equal((await readFile(join(output, "saved-versions", "pride", "styles", next.styles.version, "react.css"), "utf8")), css);
     assert.deepEqual(await (await fetch(`${url}/ReactAppearance/pride/manifest.json`)).json(), next);
     assert.equal((await fetch(`${url}/ReactAppearance/pride/styles/${next.styles.version}/react.css`)).status, 200);

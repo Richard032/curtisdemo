@@ -11,7 +11,7 @@
 
 This standalone Node.js project is the `curtisdemo` GitHub repository and a submodule of ECON-R at `ECON-R/InteractiveStyleEditor`. It is included in `InteractiveAssist.React.slnx` and `InteractiveAssist.sln`. Hostinger starts it with `npm start` and supplies `PORT`.
 
-The project owns `server.mjs`, `index.html`, `editor-template.html`, the generated `preview/` React app, and all three brand folders. Each brand folder contains its editor, logo, manifest, versioned styles, and versioned graphics. The app's original TSX pages remain in `InteractiveAssist.React`; the Common React postbuild target compiles them into this project's `preview/` folder and exports all brand assets here. To regenerate without a MAUI build, run from `InteractiveAssist.React`:
+The repository folders now match the public URLs: `ReactAppearance/pride/editor.html` is served at `/ReactAppearance/pride/editor.html`, and `preview/index.html` is served at `/preview/index.html`. The project owns `server.mjs`, `index.html`, `editor-template.html`, the generated `preview/` React app, and `ReactAppearance/generic/`, `ReactAppearance/ottobock/`, and `ReactAppearance/pride/`. Each brand folder contains its editor, logo, manifest, versioned styles, and versioned graphics. The app's original TSX pages remain in `InteractiveAssist.React`; the Common React postbuild target compiles them into this project's `preview/` folder and exports all brand assets here. To regenerate without a MAUI build, run from `InteractiveAssist.React`:
 
 ```powershell
 node scripts/export-appearance.mjs --brand All --project-root ../InteractiveStyleEditor

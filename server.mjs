@@ -15,6 +15,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(fileURLToPath(import.meta.url));
+const appearanceRoot = join(root, "ReactAppearance");
 const LOCAL_PORT = 3000; // Change this value to use another port when running locally.
 const dataRoot = resolve(process.env.APPEARANCE_DATA_DIR ||
   join(process.env.HOME || root, "curtis-appearance-data"));
@@ -86,7 +87,7 @@ function raster(bytes) {
 
 function asset(brand, name) {
   const saved = join(dataRoot, brand, name);
-  const packaged = join(root, brand, name);
+  const packaged = join(appearanceRoot, brand, name);
   return readFileSync(existsSync(saved) ? saved : packaged);
 }
 
@@ -157,7 +158,7 @@ function serve(response, brand, name) {
     /^graphics\/[a-f0-9]{64}\/[A-Za-z0-9][A-Za-z0-9._-]{0,95}\.(png|jpg|jpeg|gif|webp)$/i.test(name) && !name.includes("..");
   if (!allowed) reject(404, "Appearance file not found.");
   const bytes = name === "editor.html" || name === "curtis-logo.png"
-    ? readFileSync(join(root, brand, name)) : asset(brand, name);
+    ? readFileSync(join(appearanceRoot, brand, name)) : asset(brand, name);
   const extension = name.slice(name.lastIndexOf(".")).toLowerCase();
   const mime = { ".html": "text/html", ".json": "application/json", ".css": "text/css",
     ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
