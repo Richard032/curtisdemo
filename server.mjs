@@ -15,6 +15,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = dirname(fileURLToPath(import.meta.url));
+const LOCAL_PORT = 3000; // Change this value to use another port when running locally.
 const dataRoot = resolve(process.env.APPEARANCE_DATA_DIR ||
   join(process.env.HOME || root, "curtis-appearance-data"));
 const brands = ["generic", "ottobock", "pride"];
@@ -218,4 +219,4 @@ export const server = createServer(async (request, response) => {
 });
 
 // Hostinger imports this file, so the listener starts without a main-module guard.
-server.listen(Number(process.env.PORT ?? 3000), "0.0.0.0");
+server.listen(Number(process.env.PORT ?? LOCAL_PORT), "0.0.0.0");

@@ -17,6 +17,8 @@ The project owns `server.mjs`, `index.html`, `editor-template.html`, the generat
 node scripts/export-appearance.mjs --brand All --project-root ../InteractiveStyleEditor
 ```
 
+For local preview, run `node server.mjs` and open `http://localhost:3000/`. Change `LOCAL_PORT` near the top of `server.mjs` if you need another local port. Hostinger's `PORT` environment variable takes priority.
+
 Commit and push this submodule first, then commit the new submodule revision in the ECON-R `feature/react` branch. Building generates local changes here but does not publish to GitHub by itself. Keep existing version folders when updating the repository. `reference/` folders and brand `README.txt` files are for inspection and are not needed by Hostinger.
 
 Set `APPEARANCE_UPLOAD_TOKEN` in Hostinger to a separate secret of at least 24 characters before using **Save to server**. Edited versions are stored under `HOME/curtis-appearance-data` outside the deployed source; `APPEARANCE_DATA_DIR` can override that location. Keep the token out of this repository.
