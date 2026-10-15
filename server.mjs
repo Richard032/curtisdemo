@@ -197,7 +197,9 @@ export const server = createServer(async (request, response) => {
   try {
     const path = new URL(request.url, "http://localhost").pathname;
     if (request.method === "GET" && path === "/") {
-      const page = readFileSync(join(root, "index.html"));
+      const buildInfo = JSON.parse(readFileSync(join(root, "build-info.json"), "utf8"));
+      const page = Buffer.from(readFileSync(join(root, "index.html"), "utf8")
+        .replaceAll("{{EXPORT_TIMESTAMP}}", buildInfo.exportedAt));
       response.writeHead(200, { "Content-Type": "text/html; charset=utf-8",
         "Content-Length": page.length, "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" });
       response.end(page);
@@ -221,3 +223,4 @@ export const server = createServer(async (request, response) => {
 
 // Hostinger imports this file, so the listener starts without a main-module guard.
 server.listen(Number(process.env.PORT ?? LOCAL_PORT), "0.0.0.0");
+server.on("listening", () => console.log(`[AppearanceServer] Open http://127.0.0.1:${server.address().port}/`));

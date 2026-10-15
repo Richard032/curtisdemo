@@ -38,6 +38,8 @@ test("Node server serves the exported editor and publishes immutable versions", 
     const home = await fetch(url);
     assert.equal(home.status, 200);
     const chooser = await home.text();
+    const exportedAt = JSON.parse(await readFile(join(root, "build-info.json"))).exportedAt;
+    assert.ok(chooser.includes(exportedAt));
     for (const brand of ["pride", "generic", "ottobock"])
       assert.match(chooser, new RegExp("/ReactAppearance/" + brand + "/editor.html"));
     const editor = await fetch(`${url}/ReactAppearance/pride/editor.html`);

@@ -17,7 +17,7 @@ The repository folders now match the public URLs: `ReactAppearance/pride/editor.
 node scripts/export-appearance.mjs --brand All --project-root ../InteractiveStyleEditor
 ```
 
-For local preview, run `node server.mjs` and open `http://localhost:3000/`. Change `LOCAL_PORT` near the top of `server.mjs` if you need another local port. Hostinger's `PORT` environment variable takes priority.
+For local preview, run `node server.mjs` and open the address printed in the terminal (normally `http://127.0.0.1:3000/`). Leave the command running while editing. Refresh the browser after exporting changed styles, graphics, or React pages. Restart the command only if `server.mjs` changes. Change `LOCAL_PORT` near the top of `server.mjs` if you need another local port. Hostinger's `PORT` environment variable takes priority.
 
 Commit and push this submodule first, then commit the new submodule revision in the ECON-R `feature/react` branch. Building generates local changes here but does not publish to GitHub by itself. Keep existing version folders when updating the repository. `reference/` folders and brand `README.txt` files are for inspection and are not needed by Hostinger.
 
