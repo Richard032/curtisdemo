@@ -1,0 +1,45 @@
+/* React-owned generic colors. Keep in sync with that brand’s visual design. */
+:root {
+  --react-LightBackgroundColor: #FAFAFA;
+  --react-WhiteBackgroundColor: #FFFFFF;
+  --react-DarkBlackBackgroundColor: #222222;
+  --react-MediumGrayTextColor: #4d4d4d;
+  --react-LightTextColor: #FDFDDD;
+  --react-DarkTextColor: #222222;
+  --react-BrandPrimaryColor: #00B194;
+  --react-BoxBackgroundColor: var(--react-BrandPrimaryColor);
+  --react-BrandSecondaryColor: #0079C1;
+  --react-BrandLabelTextColor: #28547A;
+  --react-Transparent: Transparent;
+  --react-Gray: Gray;
+  --react-BrandButtonBackgroundLightGray: #b8b7bd;
+  --react-PopupButtonTextColor: #222222;
+  --react-PopupContentTextColor: #4d4d4d;
+  --react-PopupHeaderTextColor: #4d4d4d;
+  --react-ConnectedTabViewColor: #00B194;
+  --react-EntryFocusBackgroundColor: #C7EDE7;
+  --react-EntryFocusTextColor: #292F32;
+  --react-EntryFocusBorderColor: #00B194;
+  --react-EntryDefaultBorderColor: #E2E6EB;
+  --react-EntryDefaultLabelColor: #969CA0;
+  --react-EntryDefaultEntryColor: #767B81;
+  --react-SettingButtonBackgroundColor: #F3F6F9;
+  --react-SeparatorColor: #D6D9DE;
+  --react-ChatTextColor: #222222;
+  --react-ChatOutgoingBackgroundColor: #C7EDE7;
+  --react-ChatIngoingBackgroundColor: #DAEBF5;
+  --react-PrimaryButtonColorEnabled: var(--react-BrandPrimaryColor);
+  --react-PrimaryButtonColorDisabled: #A0A0A0;
+  --react-PrimaryButtonTextColorEnabled: #FFFFFF;
+  --react-PrimaryButtonTextColorDisabled: #FFFFFF;
+  --react-PrimaryButtonBorderColorEnabled: var(--react-BrandPrimaryColor);
+  --react-PrimaryButtonBorderColorDisabled: #A0A0A0;
+  --react-SecondaryButtonColorEnabled: #FFFFFF;
+  --react-SecondaryButtonColorDisabled: #FFFFFF;
+  --react-SecondaryButtonTextColorEnabled: var(--react-BrandPrimaryColor);
+  --react-SecondaryButtonTextColorDisabled: #A0A0A0;
+  --react-SecondaryButtonBorderColorEnabled: #FFFFFF;
+  --react-SecondaryButtonBorderColorDisabled: #FFFFFF;
+  --react-ChatEnabled: true;
+  --react-ChangeLogEnabled: true;
+}

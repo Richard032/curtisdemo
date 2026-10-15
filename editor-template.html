@@ -1,0 +1,398 @@
+<!doctype html>
+<!--
+  <copyright file="editor-template.html" company="Curtis Instruments AG">
+  (c) 2026 Curtis Instruments AG, Biberist, Switzerland, www.curtis.ch
+  </copyright>
+  <summary>Server editor for exported React styles and graphics.</summary>
+  <date>05-10-2026</date>
+  <author>rsu - Richard Sumka</author>
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Curtis appearance editor</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f3f5f7; color: #243143; font: 15px system-ui, sans-serif; }
+  header, main { max-width: 1100px; margin: auto; padding: 24px; }
+  header { padding-bottom: 0; }
+  .editor-heading { display: flex; align-items: center; gap: 18px; }
+  .editor-logo { width: 58px; height: 80px; object-fit: contain; flex-shrink: 0; }
+  h1 { margin: 0 0 12px; font-size: 26px; } h2 { font-size: 19px; }
+  p { line-height: 1.5; } small { display: block; color: #637184; }
+  section { background: white; border: 1px solid #dce2e8; border-radius: 10px; padding: 20px; margin-bottom: 18px; }
+  button { border: 0; border-radius: 6px; padding: 11px 17px; background: #215b98; color: white; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  input, textarea { padding: 9px; border: 1px solid #bbc6d2; border-radius: 5px; font: inherit; min-width: 0; }
+  #search { width: 100%; margin-bottom: 14px; }
+  #css-source { width: 100%; min-height: 260px; font: 13px/1.5 ui-monospace, monospace; }
+  .toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
+  #preview-frame { display: block; width: min(100%, 420px); height: 650px; margin: 16px auto 0; border: 1px solid #bbc6d2; border-radius: 8px; }
+  #preview-page { margin-left: 8px; }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-height: 400px; overflow: auto; }
+  .field { display: grid; gap: 5px; } .field span { font-size: 13px; overflow-wrap: anywhere; }
+  .feature-switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 0; }
+  .feature-switch input { width: 20px; height: 20px; padding: 0; accent-color: #215b98; }
+  .color-value { display: flex; align-items: center; gap: 8px; }
+  .color-value input { flex: 1; }
+  .color-swatch { width: 34px; height: 34px; flex: none; border: 1px solid #bbc6d2; border-radius: 5px; }
+  .graphics { display: grid; grid-template-columns: repeat(auto-fill,minmax(225px,1fr)); gap: 14px; }
+  .graphic { padding: 12px; border: 1px solid #dce2e8; border-radius: 6px; overflow: hidden; }
+  .graphic img { display: block; width: 100%; height: 110px; object-fit: contain; margin-bottom: 8px; background: #eef1f5; }
+  .graphic input { width: 100%; margin-top: 12px; font-size: 12px; }
+  .graphic small { overflow-wrap: anywhere; }
+  code { overflow-wrap: anywhere; } #status { min-height: 24px; }
+  #status.error { color: #a32121; } [hidden] { display: none !important; }
+  @media(max-width:650px) { .fields { grid-template-columns: 1fr; } header, main { padding: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="editor-heading">
+    <img class="editor-logo" src="curtis-logo.png" alt="Curtis Instruments">
+    <h1>Curtis appearance editor <small>Styles and graphics</small></h1>
+  </div>
+  <p>Edit this brand's styles or replace pictures, then save the changes to the update server.</p>
+  <p><a href="/">Choose another brand</a></p>
+  <div class="toolbar">
+    <label id="upload-controls" hidden>Server authorization <input id="upload-key" type="password" autocomplete="off"></label>
+    <button id="preview-button" type="button" disabled>Preview changes</button>
+    <button id="publish" disabled>Save to server</button><span id="product"></span>
+  </div>
+  <p id="status" role="status" aria-live="polite">Loading the exported appearance…</p>
+</header>
+<main id="editor" hidden>
+  <section id="preview-panel" hidden>
+    <h2>Preview</h2>
+    <p>The real React pages use browser mock data here. Preview does not publish your changes.</p>
+    <label>Page <select id="preview-page" disabled></select></label>
+    <iframe id="preview-frame" title="React app preview"></iframe>
+  </section>
+  <section>
+    <h2>Features</h2>
+    <label class="feature-switch">Chat <input id="feature-chat" type="checkbox"></label>
+    <label class="feature-switch">Change log <input id="feature-changelog" type="checkbox"></label>
+    <small>These switches affect the React pages. A feature disabled by the app cannot be enabled here.</small>
+  </section>
+  <section>
+    <h2>Colors and layout tokens</h2>
+    <input id="search" type="search" placeholder="Find a color or layout token…" aria-label="Find a color or layout token">
+    <div class="fields" id="colors"></div>
+  </section>
+  <section>
+    <h2>Styles</h2>
+    <label for="css-source">Complete stylesheet</label>
+    <p><small>Edit any selector, property, mobile rule or animation here. The color fields above update this CSS automatically. Fonts stay bundled in the app.</small></p>
+    <textarea id="css-source" spellcheck="false"></textarea>
+  </section>
+  <section>
+    <h2>Graphics</h2>
+    <p>PNG, JPEG, GIF or WebP. Maximum 5 MB per picture and 20 MB total. Replacements keep the app's original image keys.</p>
+    <div id="graphics" class="graphics"></div>
+  </section>
+  <section>
+    <h2>After saving</h2>
+    <p><strong>Save to server</strong> writes this brand's validated files through the Node.js server.</p>
+    <small id="versions"></small>
+  </section>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const encoder = new TextEncoder();
+let manifest, sheet, changedStyles = false, replacements = new Map();
+let previewReady = false, previewPayload;
+const safeValue = value => value.length <= 1024 && !/[\u0000-\u001f\u007f<>\\{};]/.test(value) &&
+  !/(?:url|image-set|expression|behavior|paint)\s*\(|(?:javascript|vbscript|data)\s*:|@|\/\*|\*\//i.test(value);
+function status(message, error = false) { $("status").textContent = message; $("status").className = error ? "error" : ""; }
+const canPublish = location.protocol === "https:" ||
+  (location.protocol === "http:" && ["127.0.0.1", "localhost"].includes(location.hostname));
+$("upload-controls").hidden = !canPublish;
+function dirty() { $("publish").disabled = !canPublish; status("Unsaved changes."); }
+async function digest(bytes) { return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)), b => b.toString(16).padStart(2, "0")).join(""); }
+function newVersion() { return Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, "0")).join(""); }
+
+// Relative URLs read this brand's fixed subfolders on the update server.
+async function read(path) {
+  const response = await fetch(path, { cache: "no-store" });
+  if (!response.ok) throw Error("Missing appearance file: " + path);
+  return new File([await response.blob()], path.split("/").at(-1));
+}
+
+// CSS stays data: no scripts, external resources, CSS escapes or executable properties.
+function validateCss(css) {
+  const clean = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  if (encoder.encode(css).length > 512 * 1024 || /[<\\\0]/.test(css) || clean.includes("/*") ||
+      /\b(?:url|image-set|expression|behavior|paint)\s*\(|(?:javascript|vbscript|data)\s*:|(?:^|[;{\s])(?:behavior|-moz-binding)\s*:|@\s*(?:import|font-face|namespace|document)\b/i.test(clean) ||
+      clean.replace(/@\s*(?:media|keyframes|-webkit-keyframes)\b/g, "").includes("@"))
+    throw Error("CSS scripts, external resources and unsupported rules are forbidden.");
+}
+function serializeCss() { return Array.from(sheet.cssRules, rule => rule.cssText).join("\n") + "\n"; }
+function renderFeatures() {
+  let root = Array.from(sheet.cssRules).find(rule => rule instanceof CSSStyleRule && rule.selectorText === ":root");
+  for (const [id, property] of [["feature-chat", "--react-ChatEnabled"], ["feature-changelog", "--react-ChangeLogEnabled"]]) {
+    const input = $(id);
+    input.checked = root?.style.getPropertyValue(property).trim() !== "false";
+    input.onchange = () => {
+      root ??= sheet.cssRules[sheet.insertRule(":root {}", 0)];
+      root.style.setProperty(property, input.checked ? "true" : "false");
+      $("css-source").value = serializeCss();
+      changedStyles = true; dirty();
+    };
+  }
+}
+// Link old published styles when they repeat the brand color for these shared roles.
+function linkBrandColors() {
+  let linked = false;
+  for (const rule of sheet.cssRules) {
+    if (!(rule instanceof CSSStyleRule)) continue;
+    const primary = rule.style.getPropertyValue("--react-BrandPrimaryColor").trim();
+    if (!primary) continue;
+    for (const name of ["BoxBackgroundColor", "PrimaryButtonColorEnabled",
+      "PrimaryButtonBorderColorEnabled", "SecondaryButtonTextColorEnabled"]) {
+      const property = "--react-" + name;
+      if (rule.style.getPropertyValue(property).trim().toLowerCase() !== primary.toLowerCase()) continue;
+      rule.style.setProperty(property, "var(--react-BrandPrimaryColor)");
+      linked = true;
+    }
+  }
+  return linked;
+}
+function previewColor(value, seen = new Set()) {
+  const alias = /^var\(\s*(--react-[\w-]+)\s*\)$/.exec(value);
+  if (!alias) return CSS.supports("color", value) ? value : null;
+  if (seen.has(alias[1])) return null;
+  seen.add(alias[1]);
+  let next = "";
+  for (const rule of sheet.cssRules) {
+    if (!(rule instanceof CSSStyleRule) ||
+        (rule.selectorText !== ":root" && !rule.selectorText.includes('[data-react-brand="' + manifest.brand + '"]'))) continue;
+    next = rule.style.getPropertyValue(alias[1]).trim() || next;
+  }
+  return next ? previewColor(next, seen) : null;
+}
+function renderColors() {
+  $("colors").replaceChildren();
+  const search = $("search").value.toLowerCase();
+  const swatches = [];
+  function scan(rules) {
+    for (const rule of rules) {
+      if (rule instanceof CSSStyleRule) for (const property of Array.from(rule.style)) {
+        if (!property.startsWith("--react-") || property === "--react-ChatEnabled" ||
+            property === "--react-ChangeLogEnabled" || !property.toLowerCase().includes(search)) continue;
+        const row = document.createElement("label"); row.className = "field";
+        const title = document.createElement("span"); title.textContent = property;
+        const input = document.createElement("input");
+        input.value = rule.style.getPropertyValue(property).trim();
+        const valueRow = document.createElement("div"); valueRow.className = "color-value";
+        const swatch = document.createElement("span"); swatch.className = "color-swatch";
+        swatch.setAttribute("role", "img");
+        swatch.setAttribute("aria-label", "Color preview for " + property);
+        function updateSwatch() {
+          const color = previewColor(input.value.trim());
+          swatch.hidden = !color;
+          if (color) swatch.style.backgroundColor = color;
+        }
+        swatches.push(updateSwatch);
+        updateSwatch();
+        input.addEventListener("input", () => {
+          const value = input.value.trim();
+          updateSwatch();
+          const valid = safeValue(value) && (!value || CSS.supports(property, value));
+          input.setCustomValidity(valid ? "" : "Invalid CSS value.");
+          if (!valid) return;
+          if (value) rule.style.setProperty(property, value);
+          else rule.style.removeProperty(property);
+          swatches.forEach(update => update());
+          $("css-source").value = serializeCss();
+          changedStyles = true; dirty();
+        });
+        valueRow.append(input, swatch);
+        row.append(title, valueRow); $("colors").append(row);
+      }
+      else if (rule.cssRules) scan(rule.cssRules);
+    }
+  }
+  scan(sheet.cssRules);
+}
+
+async function rasterType(file) {
+  const b = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+  if ([137,80,78,71,13,10,26,10].every((n, i) => b[i] === n)) return "image/png";
+  if (b[0] === 255 && b[1] === 216 && b[2] === 255) return "image/jpeg";
+  if (String.fromCharCode(...b.slice(0, 4)) === "GIF8") return "image/gif";
+  if (String.fromCharCode(...b.slice(0, 4)) === "RIFF" && String.fromCharCode(...b.slice(8, 12)) === "WEBP") return "image/webp";
+  throw Error("Only PNG, JPEG, GIF and WebP images are allowed.");
+}
+async function renderGraphics() {
+  $("graphics").replaceChildren();
+  for (const asset of manifest.graphics.files) {
+    const card = document.createElement("div"); card.className = "graphic";
+    const image = document.createElement("img"); image.alt = asset.name;
+    const show = file => { const url = URL.createObjectURL(file); image.onload = () => URL.revokeObjectURL(url); image.src = url; };
+    show(replacements.get(asset.name) || await read("graphics/" + manifest.graphics.version + "/" + asset.name));
+    const name = document.createElement("small"); name.textContent = asset.name;
+    const input = document.createElement("input"); input.type = "file"; input.accept = ".png,.jpg,.jpeg,.gif,.webp";
+    input.setAttribute("aria-label", "Replace " + asset.name);
+    input.onchange = async () => {
+      const file = input.files[0]; if (!file) return;
+      try {
+        if (file.size > 5 * 1024 * 1024) throw Error("Picture exceeds 5 MB.");
+        await rasterType(file);
+        const bitmap = await createImageBitmap(file); bitmap.close();
+        replacements.set(asset.name, file); show(file); dirty();
+      } catch (error) { input.value = ""; status(error.message, true); }
+    };
+    card.append(image, name, input); $("graphics").append(card);
+  }
+}
+function showVersions() {
+  $("versions").textContent = "Styles: " + manifest.styles.version + " · Graphics: " + manifest.graphics.version;
+}
+
+// Load the complete stylesheet. Nested media and animation rules remain intact when edited.
+async function loadPackage() {
+    $("editor").hidden = true; $("publish").disabled = true;
+    manifest = JSON.parse(await (await read("manifest.json")).text());
+    if (!["generic", "ottobock", "pride"].includes(manifest.brand) || manifest.schemaVersion !== 2 || manifest.styles.uiContractVersion !== 2 || manifest.graphics.uiContractVersion !== 2)
+      throw Error("This editor requires appearance schema 2 and UI contract 2.");
+    const css = await (await read("styles/" + manifest.styles.version + "/react.css")).text();
+    validateCss(css);
+    sheet = new CSSStyleSheet(); sheet.replaceSync(css);
+    const linked = linkBrandColors();
+    $("css-source").value = linked ? serializeCss() : css;
+    renderFeatures();
+    renderColors();
+    changedStyles = linked; replacements.clear(); $("publish").disabled = !linked || !canPublish; $("preview-button").disabled = false;
+    $("product").textContent = manifest.brand; $("editor").hidden = false;
+    showVersions(); await renderGraphics();
+    status(linked ? "Matching colors now follow the brand color. Preview and save to publish." : "Appearance loaded. Make your changes.");
+}
+$("css-source").addEventListener("input", () => {
+  const input = $("css-source");
+  try {
+    validateCss(input.value);
+    const next = new CSSStyleSheet(); next.replaceSync(input.value);
+    sheet = next;
+    renderFeatures();
+    renderColors();
+    input.setCustomValidity("");
+    changedStyles = true; dirty();
+  } catch (error) {
+    input.setCustomValidity(error.message);
+    status(error.message, true);
+    $("publish").disabled = true;
+  }
+});
+$("search").oninput = renderColors;
+
+// The iframe runs the compiled React app. Its routes are supplied by that app.
+window.addEventListener("message", event => {
+  if (event.source !== $("preview-frame").contentWindow || event.origin !== location.origin) return;
+  if (event.data?.type === "curtis-appearance-preview-ready") {
+    const routes = Array.isArray(event.data.routes) ? event.data.routes : [];
+    $("preview-page").replaceChildren(...routes.filter(route => /^\/[A-Za-z0-9/_-]+$/.test(route.path) && typeof route.title === "string")
+      .map(route => { const option = document.createElement("option"); option.value = route.path; option.textContent = route.title; return option; }));
+    $("preview-page").value = "/start"; $("preview-page").disabled = false;
+    previewReady = true;
+    if (previewPayload) $("preview-frame").contentWindow.postMessage(previewPayload, location.origin);
+    status("React preview ready. Save to server when ready.");
+  } else if (event.data?.type === "curtis-appearance-preview-route") {
+    $("preview-page").value = event.data.path;
+  }
+});
+$("preview-page").onchange = () => {
+  if (previewReady) $("preview-frame").contentWindow.location.hash = "#" + $("preview-page").value;
+};
+$("preview-button").onclick = async () => {
+  try {
+    const css = $("css-source").value;
+    validateCss(css);
+    const testSheet = new CSSStyleSheet(); testSheet.replaceSync(css);
+    const graphics = {};
+    for (const asset of manifest.graphics.files) {
+      const file = replacements.get(asset.name) || await read("graphics/" + manifest.graphics.version + "/" + asset.name);
+      graphics[asset.name] = "data:" + await rasterType(file) + ";base64," + base64(new Uint8Array(await file.arrayBuffer()));
+    }
+    previewPayload = { type: "curtis-appearance-preview-update", css, graphics };
+    $("preview-panel").hidden = false;
+    if (previewReady) {
+      $("preview-frame").contentWindow.postMessage(previewPayload, location.origin);
+      status("React preview updated. Save to server when ready.");
+    } else {
+      $("preview-frame").src = "/preview/index.html?appearancePreview=1&brand=" + manifest.brand + "#/start";
+      status("Loading React preview…");
+    }
+    $("preview-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) { status(error.message, true); }
+};
+function base64(bytes) {
+  const chunks = [];
+  for (let i = 0; i < bytes.length; i += 32768)
+    chunks.push(String.fromCharCode(...bytes.subarray(i, i + 32768)));
+  return btoa(chunks.join(""));
+}
+
+// Validate the complete appearance before sending it to the server.
+async function preparePackage() {
+  const invalid = $("editor").querySelector("input:invalid, textarea:invalid");
+  if (invalid) throw Error(invalid.validationMessage);
+  const next = structuredClone(manifest);
+  const css = changedStyles ? $("css-source").value : await (await read("styles/" + manifest.styles.version + "/react.css")).text();
+  validateCss(css);
+  const cssBytes = encoder.encode(css);
+  if (changedStyles) {
+    next.styles = { ...manifest.styles, version: newVersion(), sha256: await digest(cssBytes), size: cssBytes.length };
+  }
+  const images = [];
+  let total = 0;
+  for (const asset of manifest.graphics.files) {
+    const file = replacements.get(asset.name) || await read("graphics/" + manifest.graphics.version + "/" + asset.name);
+    await rasterType(file); total += file.size;
+    if (file.size > 5 * 1024 * 1024 || total > 20 * 1024 * 1024) throw Error("Graphics exceed the app's size limits.");
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    images.push({ name: asset.name, bytes, sha256: await digest(bytes), size: file.size });
+  }
+  if (replacements.size) {
+    next.graphics = { ...manifest.graphics, version: newVersion(), files: images.map(({ bytes, ...metadata }) => metadata) };
+  }
+  return { next, css, graphics: Object.fromEntries(images.map(image => [image.name, base64(image.bytes)])) };
+}
+function rememberPackage({ next }) {
+  manifest = next; changedStyles = false; replacements.clear(); showVersions();
+  $("publish").disabled = true;
+}
+function working(value) {
+  $("publish").disabled = value;
+  $("editor").inert = value;
+}
+$("publish").onclick = async () => {
+  working(true);
+  try {
+    if (!canPublish) throw Error("Open this editor through HTTPS to publish.");
+    const key = $("upload-key").value;
+    if (!key) throw Error("Enter server authorization before publishing.");
+    const previous = { styles: manifest.styles.version, graphics: manifest.graphics.version };
+    const prepared = await preparePackage();
+    const response = await fetch(new URL("../api/publish", location.href), {
+      method: "POST", cache: "no-store", credentials: "same-origin",
+      headers: { "Content-Type": "application/json", "X-Appearance-Upload-Key": key },
+      body: JSON.stringify({ manifest: prepared.next, css: prepared.css, graphics: prepared.graphics, expected: previous })
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok) throw Error(result?.message || "Server publishing failed (HTTP " + response.status + ").");
+    rememberPackage(prepared);
+    status("Published online styling. The app will see the new version on its next check.");
+  } catch (error) { status(error.message, true); }
+  finally {
+    $("editor").inert = false;
+    if (changedStyles || replacements.size) $("publish").disabled = false;
+  }
+};
+window.addEventListener("beforeunload", event => { if (changedStyles || replacements.size) { event.preventDefault(); event.returnValue = ""; } });
+if (canPublish) loadPackage().catch(error => status(error.message, true));
+else status("Open this editor at its HTTPS server address to edit and save.", true);
+</script>
+</body>
+</html>

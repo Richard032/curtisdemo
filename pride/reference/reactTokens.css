@@ -1,0 +1,65 @@
+/* React uses CSS lengths and browser states instead of MAUI Setter values.
+   These values describe the React layout directly; the brand files own colors. */
+:root {
+  --react-FontSizeMiddle: 15px;
+  --react-FontSizeBig: 20.5px;
+  --react-ButtonHeight: 55px;
+  --react-ButtonWidth: 200px;
+  --react-StepCircleSize: 35px;
+  --react-StepSpacing: 12px;
+  --react-StepPadding: 15px 0;
+  --react-SpacingVerticalStack: 22px;
+  --react-ChatBarMargin: 10px;
+  --react-ChatBarBorderPadding: 2px;
+  --react-ChatBarTextPadding: 10px;
+  --react-PageTitlePadding: 20px 0 10px;
+  --react-PlaceholderColor: #969CA0;
+  --react-DisclaimerButtonWidth: auto;
+  --react-DisclaimerButtonHeight: auto;
+}
+
+/* MAUI OnIdiom and OnPlatform values become explicit React selectors. */
+:root[data-react-platform="ios"] {
+  --react-FontSizeMiddle: 17px;
+  --react-FontSizeBig: 22px;
+}
+
+:root[data-react-idiom="tablet"] {
+  --react-ButtonWidth: 300px;
+  --react-StepCircleSize: 50px;
+  --react-StepSpacing: 25px;
+  --react-StepPadding: 20px 0;
+  --react-SpacingVerticalStack: 30px;
+  --react-ChatBarTextPadding: 5px;
+  --react-PageTitlePadding: 25px 0 10px;
+  --react-DisclaimerButtonWidth: 300px;
+  --react-DisclaimerButtonHeight: 55px;
+}
+
+:root[data-react-idiom="tablet"][data-react-platform="android"] {
+  --react-FontSizeMiddle: 19px;
+  --react-FontSizeBig: 24px;
+}
+
+:root[data-react-idiom="tablet"][data-react-platform="ios"] {
+  --react-FontSizeMiddle: 21px;
+  --react-FontSizeBig: 29px;
+}
+
+:root[data-react-idiom="desktop"] {
+  --react-ButtonHeight: 80px;
+  --react-ButtonWidth: 250px;
+  --react-StepCircleSize: 50px;
+  --react-StepSpacing: 25px;
+  --react-StepPadding: 20px 0;
+  --react-SpacingVerticalStack: 30px;
+  --react-ChatBarTextPadding: 5px;
+  --react-PageTitlePadding: 25px 0 10px;
+  --react-DisclaimerButtonWidth: 250px;
+  --react-DisclaimerButtonHeight: 80px;
+}
+
+:root[data-react-idiom="desktop"][data-react-platform="winui"] {
+  --react-FontSizeMiddle: 17px;
+  --react-FontSizeBig: 25px;
+}

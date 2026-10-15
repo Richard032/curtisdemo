@@ -1,0 +1,11 @@
+/* React-owned pride colors. Keep in sync with that brand’s visual design. */
+:root[data-react-brand="pride"] {
+  --react-BrandPrimaryColor: #FEC718;
+  --react-BrandSecondaryColor: #fd7e14;
+  --react-ConnectedTabViewColor: #FEC718;
+  --react-EntryFocusBackgroundColor: #FDFDDD;
+  --react-EntryFocusBorderColor: #FEC718;
+  --react-ChatOutgoingBackgroundColor: #DB8000;
+  --react-ChatIngoingBackgroundColor: #FFF8BA;
+  --react-PrimaryButtonTextColorEnabled: #000000;
+}

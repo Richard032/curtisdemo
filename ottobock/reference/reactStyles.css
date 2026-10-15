@@ -1,0 +1,59 @@
+/* React equivalents of the named XAML styles used by TSX pages.
+   A CSS rule is written for the actual HTML element; unsupported MAUI
+   properties such as HorizontalOptions are represented by its layout rule. */
+
+[data-react-style="CommonBlackTextLabelStyle"] { color: var(--react-DarkTextColor); }
+[data-react-style="CommonCenterSizeBigLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeBig); text-align: center; }
+[data-react-style="CommonCenterSizeMiddleLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); text-align: center; }
+[data-react-style="CommonLeftSizeMiddleLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); text-align: left; }
+[data-react-style="CommonLabelSettingsStyle"] { margin: var(--react-PageTitlePadding); color: var(--react-DarkTextColor); font-size: var(--react-FontSizeBig); font-weight: 700; text-align: left; }
+[data-react-style="CommonLabelSessionDateStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: center; }
+[data-react-style="CommonLabelRemoteTimeoutTitleStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: right; }
+[data-react-style="CommonLabelRemoteTimeoutValueStyle"] { width: 100px; color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: left; }
+[data-react-style="CommonStepLabelStyle"] { color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); text-align: left; }
+[data-react-style="InputLabelStyle"] { color: var(--react-EntryDefaultLabelColor); font-size: var(--react-FontSizeMiddle); font-weight: 400; }
+[data-react-style="ConnectionDetailTitleLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 400; text-align: left; }
+[data-react-style="ConnectionDetailValueLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: left; }
+[data-react-style="TabTitleStyle"], [data-react-style="ConnectionDetailsTitleLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeBig); font-weight: 700; text-align: left; }
+
+/* MAUI BoxView.Color paints the circle. HTML text color belongs to its child. */
+[data-react-style="CommonStepCircleBoxViewStyle"] { width: var(--react-StepCircleSize); height: var(--react-StepCircleSize); border-radius: 50%; background: var(--react-BoxBackgroundColor); }
+[data-react-style="CommonStepNumberLabelStyle"] { width: var(--react-StepCircleSize); height: var(--react-StepCircleSize); color: var(--react-PrimaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 700; text-align: center; }
+[data-react-style="CommonStepGridStyle"] { gap: var(--react-StepSpacing); padding: var(--react-StepPadding); background: transparent; }
+
+[data-react-style="CommonBottomBorderStyle"] { height: 1px; background: var(--react-EntryDefaultBorderColor); }
+[data-react-style="CommonFormLabelStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; }
+[data-react-style="CommonFormEntryStyle"] { color: var(--react-EntryFocusTextColor); font-size: var(--react-FontSizeMiddle); background: transparent; }
+[data-react-style="CommonFormEntryStyle"]::placeholder { color: var(--react-EntryDefaultEntryColor); opacity: 1; }
+[data-react-style="TranslatedPlaceholderEntryStyle"] { min-height: 38px; color: var(--react-EntryDefaultEntryColor); font-size: var(--react-FontSizeMiddle); background: transparent; }
+[data-react-style="TranslatedPlaceholderEntryStyle"]::placeholder { color: var(--react-PlaceholderColor); opacity: 1; }
+[data-react-style="InputFrameStyle"] { padding: 5px 10px; border: 1px solid var(--react-EntryDefaultBorderColor); border-radius: 8px; background: transparent; box-shadow: none; }
+
+[data-react-style="CommonButtonTextStyle"], [data-react-style="CommonPrimaryButtonStyleEnabled"] { width: var(--react-ButtonWidth); height: var(--react-ButtonHeight); color: var(--react-PrimaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 400; border: 1px solid var(--react-PrimaryButtonBorderColorEnabled); background: var(--react-PrimaryButtonColorEnabled); white-space: normal; }
+[data-react-style="CommonSecondaryButtonStyleEnabled"] { width: var(--react-ButtonWidth); height: var(--react-ButtonHeight); color: var(--react-SecondaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 400; border: 1px solid var(--react-SecondaryButtonBorderColorEnabled); background: var(--react-SecondaryButtonColorEnabled); white-space: normal; }
+/* MAUI's -1 request means natural size, not a negative CSS dimension. */
+[data-react-style="CommonDisclaimerButtonStyle"] { width: var(--react-DisclaimerButtonWidth); height: var(--react-DisclaimerButtonHeight); color: var(--react-PrimaryButtonTextColorEnabled); font-size: var(--react-FontSizeMiddle); font-weight: 400; background: var(--react-PrimaryButtonColorEnabled); white-space: normal; }
+[data-react-style="CommonTransparentButtonTextStyle"] { width: 120px; height: var(--react-ButtonHeight); color: var(--react-BrandPrimaryColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; border: 0; background: transparent; white-space: normal; }
+[data-react-style="CommonTransparentMenuButtonStyle"] { min-height: 45px; padding: 0; color: var(--react-DarkTextColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; border: 0; background: transparent; white-space: normal; }
+[data-react-style="CommonTutorialButtonTextStyle"] { color: var(--react-BrandPrimaryColor); font-size: var(--react-FontSizeMiddle); font-weight: 700; border: 0; background: transparent; white-space: normal; }
+/* A browser checkbox has no MAUI OnColor or ThumbColor setters. */
+[data-react-style="CommonSwitchStyle"] { accent-color: var(--react-BrandPrimaryColor); }
+
+[data-react-style="CustomVerticalStackStyle"] { padding: 20px; background: transparent; row-gap: var(--react-SpacingVerticalStack); }
+[data-react-style="DefaultVerticalStackLayoutStyle"] { padding: 25px; background: transparent; }
+[data-react-style="ResponsiveGridStyle"] { padding: 25px; background: transparent; row-gap: 12px; }
+[data-react-style="SessionLogGridStyle"] { padding: 0 10px; background: transparent; }
+[data-react-style="ConnectionDetailGridStyle"] { padding: 0 0 20px 20px; }
+
+/* These layouts use wider side margins on tablets in MAUI. */
+:root[data-react-idiom="tablet"] [data-react-style="CustomVerticalStackStyle"] { padding: 0 100px 25px; }
+:root[data-react-idiom="tablet"] [data-react-style="DefaultVerticalStackLayoutStyle"] { padding: 25px 150px; }
+:root[data-react-idiom="tablet"] [data-react-style="ResponsiveGridStyle"] { padding: 0 200px 25px; }
+:root[data-react-idiom="tablet"] [data-react-style="SessionLogGridStyle"] { padding: 0 25px; }
+:root[data-react-idiom="desktop"] [data-react-style="CustomVerticalStackStyle"],
+:root[data-react-idiom="desktop"] [data-react-style="ResponsiveGridStyle"] { padding: 0; }
+:root[data-react-idiom="desktop"] [data-react-style="DefaultVerticalStackLayoutStyle"] { padding: 25px 150px; }
+:root[data-react-idiom="desktop"] [data-react-style="SessionLogGridStyle"] { padding: 0 25px; }
+
+[data-react-style="CommonEditorStyle"] { color: var(--react-DarkTextColor); }
+[data-react-style="CommonLabelStyle"] { font-size: var(--react-FontSizeMiddle); }

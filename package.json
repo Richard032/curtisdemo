@@ -1,7 +1,7 @@
 {
   "_copyright": "(c) 2026 Curtis Instruments AG, Biberist, Switzerland, www.curtis.ch",
   "_creator": "rsu - Richard Sumka",
-  "name": "curtis-react-appearance-server",
+  "name": "interactive-style-editor",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,6 +9,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "check": "node --check server.mjs"
   }
 }

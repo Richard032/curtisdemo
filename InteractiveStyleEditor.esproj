@@ -1,0 +1,17 @@
+<!--
+  <copyright file="InteractiveStyleEditor.esproj" company="Curtis Instruments AG">
+  (c) 2026 Curtis Instruments AG, Biberist, Switzerland, www.curtis.ch
+  </copyright>
+  <summary>Standalone Node.js appearance editor in the React solution.</summary>
+  <date>15-10-2026</date>
+  <author>rsu - Richard Sumka</author>
+-->
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.4338480">
+  <PropertyGroup>
+    <StartupCommand>node server.mjs</StartupCommand>
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <ShouldRunBuildScript>true</ShouldRunBuildScript>
+    <BuildCommand>node --check server.mjs</BuildCommand>
+    <BuildOutputFolder>$(MSBuildProjectDirectory)</BuildOutputFolder>
+  </PropertyGroup>
+</Project>

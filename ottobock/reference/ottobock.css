@@ -1,0 +1,16 @@
+/* React-owned ottobock colors. Keep in sync with that brand’s visual design. */
+:root[data-react-brand="ottobock"] {
+  --react-BrandPrimaryColor: #00157A;
+  --react-BrandLabelTextColor: #00157A;
+  --react-WhiteTextColor: White;
+  --react-ConnectedTabViewColor: #DAEBF5;
+  --react-EntryFocusBackgroundColor: #EDF1FF;
+  --react-EntryFocusBorderColor: #3B54D6;
+  --react-ChatTextColor: #FDFDDD;
+  --react-ChatOutgoingBackgroundColor: #222222;
+  --react-ChatIngoingBackgroundColor: #00157A;
+  --react-PrimaryButtonColorDisabled: #E5E7EB;
+  --react-PrimaryButtonTextColorDisabled: #9CA3AF;
+  --react-PrimaryButtonBorderColorDisabled: #E5E7EB;
+  --react-SecondaryButtonTextColorDisabled: #9CA3AF;
+}
